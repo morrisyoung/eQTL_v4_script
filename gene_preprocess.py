@@ -5,6 +5,13 @@
 ## indeed, later on, we can not only remove those NULL genes; we can also remove some non-coding genes, or some specific types of genes
 
 
+## TODO: this script should be able to quantile normalize all the genes (across all samples)
+
+
+
+
+
+
 ## the below means "at least \portion of the samples (eQTL) have rpkm value >= \threshold"
 threshold = 0.1  ## this rpkm value is used to define a gene is expressed
 portion = 0.5  ## 0.9, 0.5
@@ -12,6 +19,9 @@ portion = 0.5  ## 0.9, 0.5
 
 if __name__ == '__main__':
 
+
+
+	'''
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_1_sample", 'r')
 	file1 = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene", 'w')
 
@@ -62,3 +72,8 @@ if __name__ == '__main__':
 	print "of all samples that have",
 	print threshold,
 	print "rpkm value)."
+	'''
+
+
+
+	## gene quantile normalization starts from here
