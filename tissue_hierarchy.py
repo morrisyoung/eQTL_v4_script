@@ -4,6 +4,7 @@
 if __name__ == '__main__':
 
 
+	##==================================== == == == == == == == ==
 	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'r')
 	sample_tissue_map = {}
 	while 1:
@@ -20,7 +21,7 @@ if __name__ == '__main__':
 	file.close()
 
 
-
+	##==================================== == == == == == == == ==
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
 	file.readline()
 	file.readline()
@@ -56,11 +57,38 @@ if __name__ == '__main__':
 			tissue_sample_rep[tissue][sample].append(rpkm)
 
 
+	print "number of etissues:",
 	print len(tissue_sample_rep)
+	print "number of genes:",
 	print len(gene_list)
+	print "each etissue has the following number of esamples:"
 	for tissue in tissue_sample_rep:
 		print tissue,
 		print len(tissue_sample_rep[tissue])
 
 	file.close()
+
+
+
+
+	##==================================== == == == == == == == ==
+	tissue_expression_ave = {}
+	for tissue in tissue_sample_rep:
+		tissue_expression_ave[tissue] = []
+		for i in range(len(gene_list)):
+			tissue_expression_ave[tissue].append(0)
+
+		for sample in tissue_sample_rep[tissue]:
+			for i in range(len(tissue_sample_rep[tissue][sample])):
+				rpkm = tissue_sample_rep[tissue][sample][i]
+				tissue_expression_ave[tissue][i] += rpkm
+
+		for i in range(len(gene_list)):
+			tissue_expression_ave[tissue][i] = tissue_expression_ave[tissue][i] / len(tissue_sample_rep[tissue])
+
+
+	print "each etissue has the following number of genes:"
+	for tissue in tissue_expression_ave:
+		print tissue,
+		print len(tissue_expression_ave[tissue])
 
