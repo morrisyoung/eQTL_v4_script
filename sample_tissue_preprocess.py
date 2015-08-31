@@ -2,7 +2,7 @@
 ## two criterias: 1. sample has genotype information; and 2. sample is in eQTL (sample size>=60) tissue
 ## right now I use 60 as the threashold for eQTL tissues
 
-## right after we get the sample list, we should process the rpkm file to only leave these qualified samples (for convenience of up-coming processing and computation)
+## right after we get the sample list, we should process the rpkm file to only leave these qualified samples (for convenience of up-coming processing and computation)  --> done in this script
 
 
 

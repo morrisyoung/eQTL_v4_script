@@ -17,18 +17,16 @@ The order of these scripts are:
 3. [to-do] dosage\_qc\_chunk.py
 
 
+
 ** Expression:
 
-eSample\_partition.py
+1. sample\_tissue\_preprocess.py
 
-gene\_preprocess.py
+2. eSample\_partition.py
 
-sample\_tissue\_preprocess.py
+3. gene\_preprocess.py
 
-x. tissue\_hierarchy.py
-
-
-
+4. tissue\_hierarchy.py
 
 
 
@@ -40,7 +38,7 @@ Other scripts (not necessary in order):
 
 
 
-
+==============================================
 The pipeline for genotype QC and LD pruning:
 
 As I may use different LD threshold (currently 0.5 for R^2) and the association threshold (currently 0.5 for R^2, the same with previous one) in the future, and there is hard drive usage issue, I record the procedure here.

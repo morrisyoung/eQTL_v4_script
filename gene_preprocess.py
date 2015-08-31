@@ -78,7 +78,7 @@ if __name__ == '__main__':
 	'''
 
 
-	## gene quantile normalization starts from here
+	##========================== gene quantile normalization starts from here ==========================
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene", 'r')
 	file1 = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'w')
 
