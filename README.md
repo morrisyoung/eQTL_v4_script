@@ -38,6 +38,8 @@ Other scripts (not necessary in order):
 
 2. GTEx\_beta\_extract.py
 
+3. practice\_cis\_detect.py
+
 
 
 ==============================================
