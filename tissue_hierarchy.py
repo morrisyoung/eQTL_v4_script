@@ -1,6 +1,9 @@
 ## to do the tissue hierarchical clustering on all 17 etissues (with both training samples and testing samples)
 import numpy as np
 import scipy
+from scipy import spatial
+from scipy import cluster
+from matplotlib.pyplot import show
 
 
 if __name__ == '__main__':
@@ -128,12 +131,25 @@ if __name__ == '__main__':
 	array = np.ndarray(shape=(len(rep), dimension), dtype=float)
 	for i in range(len(tissue_list)):
 		tissue = tissue_list[i]
-		for j in range(len(rep[tissue])):
+		for j in range(dimension):
 			rpkm = rep[tissue][j]
 			array[i][j] = rpkm
 
 
+	Y = spatial.distance.pdist(array, 'euclidean')
+	Z = cluster.hierarchy.linkage(Y, method='single', metric='euclidean')
+	#cluster.hierarchy.dendrogram(Z, orientation='left')
+	R = cluster.hierarchy.dendrogram(Z, orientation='left', labels=tissue_list, color_threshold=0)
 
-	Y = scipy.spatial.distance.pdist(array, 'euclidean')
-	Z = scipy.cluster.hierarchy.linkage(Y, method='single', metric='euclidean')
-	scipy.cluster.hierarchy.dendrogram(Z)
+	for i in range(len(tissue_list)):
+		print i,
+		print tissue_list[i]
+
+	for key in R:
+		print key
+		print R[key]
+
+
+
+	show()
+
