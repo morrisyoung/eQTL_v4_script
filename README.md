@@ -4,6 +4,8 @@ All the data files should be in the upper folder of this directory, for appropri
 
 The order of these scripts are:
 
+==============================================
+
 ** Genotype:
 
 1. genotype\_ld\_prune.py
@@ -16,7 +18,7 @@ The order of these scripts are:
 
 3. [to-do] dosage\_qc\_chunk.py
 
-
+==============================================
 
 ** Expression:
 
@@ -28,7 +30,7 @@ The order of these scripts are:
 
 4. tissue\_hierarchy.py
 
-
+==============================================
 
 Other scripts (not necessary in order):
 
@@ -38,6 +40,7 @@ Other scripts (not necessary in order):
 
 
 
+==============================================
 ==============================================
 The pipeline for genotype QC and LD pruning:
 
