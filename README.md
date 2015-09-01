@@ -65,9 +65,22 @@ mv plink.ld ./post\_prune/chr”X”.ld
 mv chr”X".post\_prune.txt ./post\_prune/
 rm chr22.*
 rm data_imputed.*
-rm plink.*
+rm plink.\*
 
 Then, I need to do the following procedure to get the genotype data (dosage) we can use in learning.
 
 remove QC-ed SNPs from dosage file (simple; to be done with Python, in “/ifs/scratch/c2b2/ip_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx_Pilot_Imputation.genotype-imputed-data.c1_dosage_qc”)
 use the pruned SNP list to calculate the prior information for all un-pruned SNPs (if necessary), and get the potential for all un-pruned SNPs (will do with Python code; find the scheme first)
+
+
+==============================================
+==============================================
+fold enrichment of chromatin states (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project)
+
+We start from the first paper of this series: “http://www.nature.com/encode/threads/impact-of-functional-information-on-understanding-variation".
+
+From that paper, we use the following file as the GWAS SNPs (originally from NHGRI GWAS SNP catalog June 2011): Gwascatalog.june2011.positions.bed, from “http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration_data_jan2011/byDataType/GWAS/jan2011/".
+
+I treat each snp site as one source, though there may be several snp-phenotype associations at that site. This assumes that the associated phenotypes may be correlated themselves, so that site only contributes once. That’s why we use the above file.
+
+As we also know the learned chromatin states with their chromosome positions (from Roadmap Epigenomics project), we can calculate the following: the % of the GWAS SNP set overlapping with one chromatin state divided by the % of the total segments this chromatin state class makes up. This is the enrichment value we need for down-stream analysis.
