@@ -191,7 +191,7 @@ E096
 ==============================================
 Statistics and what we have:
 
-1. Currently we have 185 individuals, 824176 SNPs (dosage data), 17 eTissues, 1889 eSamples, 20603 non-Null genes.
+1. Currently we have 185 individuals, 824,176 SNPs (dosage data), 17 eTissues, 1,889 eSamples, 20,603 non-Null genes.
 
 2. We know the lists of pruned SNPs and un-pruned SNPs (due to LD pruning, after QC), in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.in" or "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.out".
 
