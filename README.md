@@ -193,3 +193,21 @@ Stats:
 
 1. currently we have 824176 SNPs used in the modeling.
 
+2. We know the lists of pruned SNPs and un-pruned SNPs (due to LD pruning, after QC), in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.in" or "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.out".
+
+3. We know the association coefficients (R^2) of pruned SNPs with their representative un-pruned SNPs, in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX.post\_prune.txt".
+
+4. We have the dosage data for all un-pruned SNPs in "../genotype\_185\_dosage\_matrix\_qc/chrX/...", and we also have their name and position in the same folder.
+
+5. We have the beta (only significant association) from GTEx project, which we can utilize in the initialization of our learning, in "../GTEx\_Analysis\_V4\_eQTLs/...".
+
+6. We have fully processed expression data (remove samples having no genotype and not in eTissues; remove Null genes; quantile normalize across all genes), as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized".
+
+7. We have the mean expression level (after fully processing, normalized or not) as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized\_tissue\_mean", or "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_tissue\_mean". We also have the learned tissue hierarchy as "../tissue\_hierarchy\_normalized.txt" or "../tissue\_hierarchy\_unnormalized.txt" correspondingly.
+
+8. We have gene TSS as "../gencode.v18.genes.patched\_contigs.gtf\_gene\_tss".
+
+9. As X, Y or MT genes don't have cis- SNPs (we only have autosome genotypes from GTEx), but we still consider them in our framework (they may contribute to some cell env variables), we have list of X, Y and MT genes.
+
+10. We have the sample list of each eTissues (sample size >= 60), as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type", and we further partition them into training set as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_train" and testing set as "phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_test".
+
