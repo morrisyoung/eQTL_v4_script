@@ -189,7 +189,7 @@ E096
 
 ==============================================
 ==============================================
-Stats:
+Statistics and what we have:
 
 1. currently we have 824176 SNPs used in the modeling.
 
