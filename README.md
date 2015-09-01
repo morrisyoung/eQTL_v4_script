@@ -115,36 +115,89 @@ E036
 E032
 E046
 E030
+E115
+E116
+E123
+E124
 
 Cells - Transformed fibroblasts:
 
+E126
+E128
+
 Thyroid:
+
+None
 
 Esophagus - Mucosa:
 
+E079
+
 Pancreas:
+
+E087
+E098
 
 Artery - Tibial:
 
+None
+
 Testis:
+
+None
 
 Adipose - Subcutaneous:
 
+E025
+E063
+
 Nerve - Tibial:
+
+None
 
 Artery - Aorta:
 
+E065
+
 Stomach:
+
+E111
+E092
+E110
+E094
 
 Colon - Transverse:
 
+E076
+E106
+E075
+
 Esophagus - Muscularis:
+
+E079
 
 Skin - Sun Exposed (Lower leg):
 
+E055
+E056
+E059
+E061
+E057
+E058
+E126
+E127
+
 Heart - Left Ventricle:
+
+E095
 
 Muscle - Skeletal:
 
+E108
+E107
+E120
+E121
+
 Lung:
 
+E096
