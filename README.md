@@ -75,7 +75,7 @@ use the pruned SNP list to calculate the prior information for all un-pruned SNP
 
 ==============================================
 ==============================================
-fold enrichment of chromatin states (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project)
+Fold enrichment of chromatin states (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project):
 
 We start from the first paper of this series: “http://www.nature.com/encode/threads/impact-of-functional-information-on-understanding-variation".
 
