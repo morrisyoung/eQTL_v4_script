@@ -191,7 +191,7 @@ E096
 ==============================================
 Statistics and what we have:
 
-1. currently we have 824176 SNPs used in the modeling.
+1. Currently we have 824176 SNPs used in the modeling, 17 eTissues, and 1889 eSamples.
 
 2. We know the lists of pruned SNPs and un-pruned SNPs (due to LD pruning, after QC), in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.in" or "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.out".
 
