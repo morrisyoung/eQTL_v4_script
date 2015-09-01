@@ -13,6 +13,8 @@ pair_list_rep = {}
 tissue_list = []
 
 
+
+
 def func_dfs(Tree):
 	global pair_list_rep
 
@@ -48,7 +50,10 @@ def func_dfs(Tree):
 if __name__ == '__main__':
 
 
+
+
 	'''
+
 	##==================================== == == == == == == == ==
 	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type", 'r')
 	sample_tissue_map = {}
@@ -67,7 +72,8 @@ if __name__ == '__main__':
 
 
 	##==================================== == == == == == == == ==
-	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
+	#file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r') # TODO
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene", 'r')
 	file.readline()
 	file.readline()
 	line = (file.readline()).strip()
@@ -140,18 +146,27 @@ if __name__ == '__main__':
 
 
 	##==================================== == == == == == == == ==
-	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_tissue_mean", 'w')
+	#file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_tissue_mean", 'w') # TODO
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_tissue_mean", 'w')
 	for tissue in tissue_expression_ave:
 		file.write(tissue + '\t')
 		for rpkm in tissue_expression_ave[tissue]:
 			file.write(str(rpkm) + '\t')
 		file.write('\n')
 	print "saving done!"
+
+
 	'''
 
 
 
-	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_tissue_mean", 'r')
+
+
+
+
+	##================================== from mean expression of genes to hierarchical clustering ==================================
+	#file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_tissue_mean", 'r') # TODO
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_tissue_mean", 'r')
 	rep = {}
 	dimension = 0
 	tissue_list = []
@@ -183,7 +198,8 @@ if __name__ == '__main__':
 	Tree = cluster.hierarchy.to_tree(Z)
 	func_dfs(Tree)
 
-	file = open("../tissue_hierarchy_normalized.txt", 'w')
+	#file = open("../tissue_hierarchy_normalized.txt", 'w') # TODO
+	file = open("../tissue_hierarchy_unnormalized.txt", 'w')
 	for node in pair_list_rep:
 		dist = pair_list_rep[node][0]
 		list_left = pair_list_rep[node][1]
