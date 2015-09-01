@@ -86,3 +86,65 @@ I treat each snp site as one source, though there may be several snp-phenotype a
 As we also know the learned chromatin states with their chromosome positions (from Roadmap Epigenomics project), we can calculate the following: the % of the GWAS SNP set overlapping with one chromatin state divided by the % of the total segments this chromatin state class makes up. This is the enrichment value we need for down-stream analysis.
 
 There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig\_tab/nbt.1662\_F4.html". But as there are only 1,640 GWAS SNPs considered, we will not use this smaller version of analysis.
+
+Here is a mapping from Roadmap Epigenomics project epigenome to the tissue type we have in GTEx project (reversed) if there is:
+
+
+Whole Blood: averaged from the following:
+
+E062
+E034
+E045
+E033
+E044
+E043
+E039
+E041
+E042
+E040
+E037
+E048
+E038
+E047
+E029
+E031
+E035
+E051
+E050
+E036
+E032
+E046
+E030
+
+Cells - Transformed fibroblasts:
+
+Thyroid:
+
+Esophagus - Mucosa:
+
+Pancreas:
+
+Artery - Tibial:
+
+Testis:
+
+Adipose - Subcutaneous:
+
+Nerve - Tibial:
+
+Artery - Aorta:
+
+Stomach:
+
+Colon - Transverse:
+
+Esophagus - Muscularis:
+
+Skin - Sun Exposed (Lower leg):
+
+Heart - Left Ventricle:
+
+Muscle - Skeletal:
+
+Lung:
+
