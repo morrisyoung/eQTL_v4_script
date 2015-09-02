@@ -4,7 +4,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ==============================================
 
-<h2> Genotype: <h2>
+## Genotype:
 
 1. genotype\_ld\_prune.py
 
@@ -18,7 +18,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ==============================================
 
-** Expression:
+## Expression:
 
 1. sample\_tissue\_preprocess.py
 
@@ -30,7 +30,9 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ==============================================
 
-Other scripts (for preprocessing information that may be used by the main routine, or mics):
+## Other scripts
+
+(for preprocessing information that may be used by the main routine, or mics):
 
 1. gene\_tss\_prepare.py
 
