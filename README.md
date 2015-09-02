@@ -11,19 +11,14 @@ All the data files should be in the upper folder of this directory, for appropri
 (these should happen before above script, as this outputs what's used by above script; this is used in C2B2)
 
 1. script\_qc\_ld\_pine.py
-
 2. post\_prune.py
-
 3. [to-do] dosage\_qc\_chunk.py
 
 ## Expression
 
 1. sample\_tissue\_preprocess.py
-
 2. gene\_preprocess.py
-
 3. eSample\_partition.py
-
 4. tissue\_hierarchy.py
 
 ## Other scripts
@@ -31,15 +26,10 @@ All the data files should be in the upper folder of this directory, for appropri
 (for preprocessing information that may be used by the main routine, or mics)
 
 1. gene\_tss\_prepare.py
-
 2. GTEx\_beta\_extract.py
-
 3. get\_individual.py
-
 4. prior\_calculate.py
-
 5. practice\_cis\_detect.py
-
 6. try.py
 
 
@@ -51,20 +41,20 @@ As I may use different LD threshold (currently 0.5 for R^2) and the association 
 
 1. tar zxvf “all.SNPs.tgz”
 2. mkdir post\_prune
-for all the chromosome “X”, do the following (step#04 — step#16):
-tar zxvf “chrX.all.tgz”
-cp chrX.tfam "chrX.tfam"
-[QC] ./plink —tfile “chrX” —exclude “chrX.info4.maf05.exclusion.snplist.txt” —make-bed
-[pruning] ./plink —bfile plink —indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
-[LD statistics] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
-[LD statistics further] python post\_prune.py
-mv plink.prune.in ./post\_prune/chr”X”.prune.in
-mv plink.prune.out ./post\_prune/chr”X”.prune.out
-mv plink.ld ./post\_prune/chr”X”.ld
-mv chr”X".post\_prune.txt ./post\_prune/
-rm chr22.*
-rm data_imputed.*
-rm plink.\*
+3. for all the chromosome “X”, do the following (step#04 — step#16):
+4. tar zxvf “chrX.all.tgz”
+5. cp chrX.tfam "chrX.tfam"
+6. [*QC*] ./plink —tfile “chrX” —exclude “chrX.info4.maf05.exclusion.snplist.txt” —make-bed
+7. [*pruning*] ./plink —bfile plink —indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
+8. [*LD statistics*] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
+9. [*LD statistics further*] python post\_prune.py
+10. mv plink.prune.in ./post\_prune/chr”X”.prune.in
+11. mv plink.prune.out ./post\_prune/chr”X”.prune.out
+12. mv plink.ld ./post\_prune/chr”X”.ld
+13. mv chr”X".post\_prune.txt ./post\_prune/
+14. rm chr22.*
+15. rm data_imputed.*
+16. rm plink.\*
 
 Then, I need to do the following procedure to get the genotype data (dosage) we can use in learning.
 
