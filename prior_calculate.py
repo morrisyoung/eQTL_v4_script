@@ -17,13 +17,10 @@
 import os
 
 
-
-
-def snp_cs_map(chr_rep):
-	## map the snps (pruned and un-pruned in GTEx after QC) into their chromatin states
-	## this indeed gives us the enrichment value of each snp, and we should save that into files
-
-	## we can use binary search to get the position (chromatin state) of one snp
+def snp_cs_map(chr_rep, enrich_rep):
+	## map the snps (pruned and un-pruned in GTEx after QC) into their chromatin states, and then enrichment value
+	list1 = []
+	list2 = []
 
 	for i in range(22):
 		# what we need:
@@ -31,6 +28,9 @@ def snp_cs_map(chr_rep):
 		prune_out_list = []
 		snp_info_rep = {}
 		chr = "chr" + str(i+1)
+
+		#print "chr#",
+		#print chr
 		
 		# fill in them
 		file = open("../genotype_185_dosage_matrix_qc/post_prune/" + chr + ".prune.in", 'r')
@@ -49,7 +49,6 @@ def snp_cs_map(chr_rep):
 
 			prune_out_list.append(line)
 		file.close()
-
 		file = open("../genotype_185_dosage_matrix/" + chr + "/SNP_info.txt", 'r')
 		while 1:
 			line = (file.readline()).strip()
@@ -64,7 +63,6 @@ def snp_cs_map(chr_rep):
 
 		
 		##===== now calculate =====
-		# fill in them:
 		state_in_list = []
 		state_out_list = []
 		for i in range(len(prune_in_list)):
@@ -126,22 +124,30 @@ def snp_cs_map(chr_rep):
 			state_out_list.append(state)
 
 
+		'''
+		print "in and out have",
+		print len(state_in_list),
+		print "and",
+		print len(state_out_list),
+		print "snps on this chromosome"
+		'''
 
-		print len(state_in_list)
-		print len(state_out_list)
-
-		## transform into prior value
+		## transform into prior value, and prepare to return these results
 		prior_in_list = []
 		prior_out_list = []
+		for state in state_in_list:
+			enrich = enrich_rep[state]
+			prior_in_list.append(enrich)
+		for state in state_out_list:
+			enrich = enrich_rep[state]
+			prior_out_list.append(enrich)
+
 		
+		list1.append(prior_in_list)
+		list2.append(prior_out_list)
 
 
-
-
-
-
-
-	return
+	return (list1, list2)
 
 
 
@@ -192,6 +198,9 @@ def cs_portion_gwas_portion(index):
 
 	for state in state_rep:
 		state_rep[state] = state_rep[state] * 1.0 / length_total
+
+
+	print "get chr portion of each state"
 
 	''' test
 	print "there are",
@@ -258,6 +267,8 @@ def cs_portion_gwas_portion(index):
 	for state in gwas_rep:
 		gwas_rep[state] = gwas_rep[state] * 1.0 / num_total
 
+	print "get gwas snp portion of each state"
+
 
 	# test
 	'''
@@ -278,8 +289,12 @@ def cs_portion_gwas_portion(index):
 	# state_rep, gwas_rep
 	enrich_rep = {}
 	for state in state_rep:
-		enrich_rep[state] = gwas_rep[state] / state_rep[state]
+		if state not in gwas_rep:
+			enrich_rep[state] = 0
+		else:
+			enrich_rep[state] = gwas_rep[state] / state_rep[state]
 
+	print "get enrichment value for each state"
 
 	# test
 	'''
@@ -295,20 +310,10 @@ def cs_portion_gwas_portion(index):
 	print total
 	'''
 
+	print "working on all GTEx snps..."
 
-	
-
-	snp_cs_map(chr_rep, enrich_rep)
-
-
-
-
-
-
-	return
-
-
-
+	(list1, list2) = snp_cs_map(chr_rep, enrich_rep)
+	return (list1, list2)
 
 
 
@@ -318,17 +323,96 @@ if __name__ == "__main__":
 
 	
 
-	print "test starts..."
+	print "start..."
 
 
 	#for i in range(1, 18):
 	#	os.system("mkdir ../prior.score/etissue" + str(i))
 
 
-	index = "E042"
-	cs_portion_gwas_portion(index)
+	tissue_rep = {}
+	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_60", 'r')
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		tissue = line.split('\t')[0]
+		tissue_rep[tissue] = []
+	file.close()
+
+	file = open("../prior.tissue.epigenome.map", 'r')
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		if len(line) == 1:
+			continue
+
+		tissue = line[0]
+		epi_list = line[1].split(' ')
+		tissue_rep[tissue] = epi_list
+	file.close()
+
+	print tissue_rep
 
 
-	print "test done..."
+	## build the "prior.tissue.index.map"
+	file = open("../prior.tissue.index.map", 'w')
+	tissue_index_rep = {}
+	index = 0
+	for tissue in tissue_rep:
+		index = index + 1
+		file.write(tissue + '\t' + str(index) + '\n')
+		tissue_index_rep[tissue] = index
+	file.close()
+
+	for tissue in tissue_rep:
+		if len(tissue_rep[tissue]) == 0:
+			print "no epigenomes for GTEx tissue",
+			print tissue
+			continue
+	
+		print "working on GTEx tissue",
+		print tissue
+
+		index = tissue_index_rep[tissue]
+
+		L1 = []
+		L2 = []
+
+		for epigenome in tissue_rep[tissue]:
+			(list1, list2) = cs_portion_gwas_portion(epigenome)  # list1 is for prune.in and list2 is for prune.out
+			if len(L1) == 0:
+				L1 = list1[:]
+				L2 = list2[:]
+			else:
+				for i in range(22):
+					for j in range(len(L1[i])):
+						L1[i][j] = L1[i][j] + list1[i][j]
+					for j in range(len(L2[i])):
+						L2[i][j] = L2[i][j] + list2[i][j]
+		for i in range(22):
+			for j in range(len(L1[i])):
+				L1[i][j] = L1[i][j] / len(tissue_rep[tissue])
+			for j in range(len(L2[i])):
+				L2[i][j] = L2[i][j] / len(tissue_rep[tissue])
+
+		for chr in range(1, 23):
+			file = open("../prior.score/etissue" + str(index) + "/chr" + str(chr) + ".in.score", 'w')
+			for i in range(len(L1[chr-1])):
+				enrich = L1[chr-1][i]
+				file.write(str(enrich) + '\n')
+			file.close()
+
+			file = open("../prior.score/etissue" + str(index) + "/chr" + str(chr) + ".out.score", 'w')
+			for i in range(len(L2[chr-1])):
+				enrich = L2[chr-1][i]
+				file.write(str(enrich) + '\n')
+			file.close()
+
+	print "done..."
 
 
