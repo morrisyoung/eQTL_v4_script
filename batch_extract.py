@@ -8,6 +8,9 @@
 ##
 ##
 
+# encoding: UTF-8
+import re
+
 
 def batch_individual_extract():
 
@@ -17,7 +20,7 @@ def batch_individual_extract():
 	## get the individual phenotype rep
 	individual_batch_rep = {}
 	file = open("../PhenotypeFiles/phs000424.v4.pht002742.v4.p1.c1.GTEx_Subject_Phenotypes.GRU.txt", 'r')
-	var_list = []
+	individual_var_list = []
 	individual_var_rep = {}
 	count = 0
 	while 1:
@@ -28,10 +31,10 @@ def batch_individual_extract():
 		if not line:
 			break
 
-
+		line = line[:-1]
 		line = line.split('\t')
 		if count == 11:
-			var_list = line[2:]
+			individual_var_list = line[2:]
 		else:
 			individual = line[1]
 			individual_var_rep[individual] = line[2:]
@@ -60,12 +63,67 @@ def batch_individual_extract():
 		del individual_var_rep[individual]
 	
 
-	
+
+	##=========================== quantify all individual phenotypes (excluding some) ==============================
 	## to be used:
+	##	individual_var_list
 	##	individual_var_rep
 	## to be generated:
 	##	individual_batch_var_list = []
 	##	individual_batch_rep = {}
+	##=========================== quantify all individual phenotypes (excluding some) ==============================
+	## there are 'integer', 'decimal', 'enum_integer' and 'string' types
+	## the 'integer' and 'decimal' types need to be linearly quantified, and 'enum_integer' and 'string' types can be directly quantified
+	file = open("../PhenotypeFiles/phs000424.v4.pht002742.v4.p1.GTEx_Subject_Phenotypes.var_report.xml", 'r')
+	count = 0
+	var_type_rep = {}
+	while 1:
+		line = (file.readline()).strip()
+		count += 1
+		if not line:
+			break
+		## pattern: <variable id="phv00169061.v4.p1" var_name="SUBJID" calculated_type="string" reported_type="string">
+		## may contain more than 1 item for each line
+		it = re.finditer(r"<variable.*?>", line)
+		for match in it:
+			line1 = match.group()
+			## get the var-type pair
+			pattern = re.compile(r'var_name=\".*?\"')
+			match = pattern.search(line1)
+			var = match.group().split('=')[1][1:-1]
+			pattern = re.compile(r'calculated_type=\".*?\"')
+			match = pattern.search(line1)
+			type = match.group().split('=')[1][1:-1]
+			var_type_rep[var] = type
+	file.close()
+
+	remove_list = ["TRCCLMP", "TRCHSTIN", "TRISCH", "DTHPRNINT"]
+	remove_rep = {"TRCCLMP":1, "TRCHSTIN":1, "TRISCH":1, "DTHPRNINT":1}
+
+	##==================== first of all, remove some individual phenotypes from 'remove_rep'
+	remove_index = {}
+	for i in range(len(individual_var_list)):
+		var = individual_var_list[i]
+		if var in remove_rep:
+			remove_index[i] = var
+	for i in range(len(individual_var_list)):
+		var = individual_var_list[i]
+		if i not in remove_index:
+			individual_batch_var_list.append(var)
+	for individual in individual_var_rep:
+		individual_batch_rep[individual] = []
+		for i in range(len(individual_var_rep[individual])):
+			value = individual_var_rep[individual][i]
+			if i not in remove_index:
+				individual_batch_rep[individual].append(value)
+
+	##==================== second, quantify all these batch variables
+
+
+
+
+
+
 
 
 
@@ -89,7 +147,7 @@ def batch_sample_extract():
 	## get the sample batch var
 	sample_batch_rep = {}
 	file = open("../PhenotypeFiles/phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt", 'r')
-	var_list = []
+	sample_var_list = []
 	sample_var_rep = {}
 	count = 0
 	while 1:
@@ -100,9 +158,10 @@ def batch_sample_extract():
 		if not line:
 			break
 
+		line = line[:-1]
 		line = line.split('\t')
 		if count == 11:
-			var_list = line[2:]
+			sample_var_list = line[2:]
 		else:
 			sample = line[1]
 			sample_var_rep[sample] = line[2:]
@@ -135,10 +194,12 @@ def batch_sample_extract():
 
 
 	## to be used:
+	##	sample_var_list
 	##	sample_var_rep
 	## to be generated:
 	##	sampme_batch_var_list = []
 	##	sample_batch_rep = {}
+
 
 
 
