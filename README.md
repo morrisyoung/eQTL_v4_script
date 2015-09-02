@@ -79,9 +79,9 @@ From that paper, we use the following file as the GWAS SNPs (originally from NHG
 
 I treat each snp site as one source, though there may be several snp-phenotype associations at that site. This assumes that the associated phenotypes may be correlated themselves, so that site only contributes once. That’s why we use the above file, "Gwascatalog.june2011.positions.bed".
 
-I removed all information (learned chromatin states and GWAS SNPs) from X and Y chromatin, as currently we are only interested in the autosome cis- prior for genotypes, and we actually don't have SNPs from X and Y in GTEx project.
-
 As we also know the learned chromatin states with their chromosome positions (from Roadmap Epigenomics project), we can calculate the following: the % of the GWAS SNP set overlapping with one chromatin state divided by the % of the total segments this chromatin state class makes up. This is the enrichment value we need for down-stream analysis.
+
+I remove all information (learned chromatin states and GWAS SNPs) from X and Y chromatin, as currently we are only interested in the autosome cis- prior for genotypes, and we actually don't have SNPs from X and Y in GTEx project.
 
 There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig_tab/nbt.1662_F4.html". But as there are only 1,640 GWAS SNPs considered, we will not use this smaller version of analysis.
 
