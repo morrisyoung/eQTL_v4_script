@@ -1,6 +1,6 @@
 # eQTL_script
 
-The C++ implementation for this program is in https://github.com/morrisyoung/eQTL_cplusplus.
+The C++ implementation for the learning program is at https://github.com/morrisyoung/eQTL_cplusplus.
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
@@ -41,6 +41,7 @@ As I may use different LD threshold (currently 0.5 for R^2) and the association 
 
 (there are two scripts used here: “script.py" is the general script for processing all the chromosomes, following the below procedure; “post\_prune.py” is the one used for reversing the associations between pruned SNPs and the un-pruned SNPs; the two scripts are all in C2B2 “/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx\_Pilot\_Imputation.genotype-imputed-data.c1\_ld\_qc/")
 
+```
 1. tar zxvf “all.SNPs.tgz”
 2. mkdir post\_prune
 3. for all the chromosome “X”, do the following (step#04 — step#16):
@@ -57,6 +58,7 @@ As I may use different LD threshold (currently 0.5 for R^2) and the association 
 14. rm chr22.*
 15. rm data_imputed.*
 16. rm plink.\*
+```
 
 Then, I need to do the following procedure to get the genotype data (dosage) we can use in learning.
 
