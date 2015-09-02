@@ -2,8 +2,6 @@
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
-==============================================
-
 ## Genotype
 
 1. genotype\_ld\_prune.py
@@ -18,8 +16,6 @@ All the data files should be in the upper folder of this directory, for appropri
 
 3. [to-do] dosage\_qc\_chunk.py
 
-==============================================
-
 ## Expression
 
 1. sample\_tissue\_preprocess.py
@@ -29,8 +25,6 @@ All the data files should be in the upper folder of this directory, for appropri
 3. eSample\_partition.py
 
 4. tissue\_hierarchy.py
-
-==============================================
 
 ## Other scripts
 
@@ -48,9 +42,6 @@ All the data files should be in the upper folder of this directory, for appropri
 
 6. try.py
 
-
-==============================================
-==============================================
 
 ## The pipeline for genotype QC and LD pruning
 
@@ -80,9 +71,6 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 1. Remove QC-ed SNPs from dosage file (simple; to be done with Python, in “/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx\_Pilot\_Imputation.genotype-imputed-data.c1\_dosage\_qc”).
 
 
-==============================================
-==============================================
-
 ## Expression data processing
 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
@@ -93,10 +81,6 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 
 4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized.
 
-
-
-==============================================
-==============================================
 
 ## Fold enrichment of chromatin states
 
@@ -210,10 +194,6 @@ E121
 Lung:
 E096
 
-
-
-==============================================
-==============================================
 
 ## Statistics and what we have
 
