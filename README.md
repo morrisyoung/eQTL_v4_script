@@ -98,7 +98,7 @@ There are some ready-to-use results from Roadmap people, in 2010, "Discovery and
 
 Here is a mapping from Roadmap Epigenomics project epigenome to the tissue type we have in GTEx project (reversed) if there is:
 
-
+```
 Whole Blood:
 E062
 E034
@@ -193,6 +193,7 @@ E121
 
 Lung:
 E096
+```
 
 
 ## Statistics and what we have
