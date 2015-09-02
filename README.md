@@ -199,7 +199,7 @@ E096
 
 ### Statistics
 
-* Currently we have 185 individuals, 824,176 SNPs (dosage data), 17 eTissues, 1,889 eSamples, 20,603 non-Null genes. We can load them all into memory.
+* Currently we have * 185 individuals *, * 824,176 SNPs * (dosage data), * 17 eTissues *, * 1,889 eSamples *, * 20,603 non-Null genes *. We can load them all into memory.
 
 ### Genotype relevant
 
