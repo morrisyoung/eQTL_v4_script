@@ -65,7 +65,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
 2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 currently.
-3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set.
+3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set. The training set and testing set are prepared before learning and testing in the main routine.
 4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized.
 
 
@@ -78,6 +78,8 @@ We start from the first paper of this series: “http://www.nature.com/encode/th
 From that paper, we use the following file as the GWAS SNPs (originally from NHGRI GWAS SNP catalog June 2011): Gwascatalog.june2011.positions.bed, from “http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration_data_jan2011/byDataType/GWAS/jan2011/".
 
 I treat each snp site as one source, though there may be several snp-phenotype associations at that site. This assumes that the associated phenotypes may be correlated themselves, so that site only contributes once. That’s why we use the above file, "Gwascatalog.june2011.positions.bed".
+
+I removed all information (learned chromatin states and GWAS SNPs) from X and Y chromatin, as currently we are only interested in the autosome cis- prior for genotypes, and we actually don't have SNPs from X and Y in GTEx project.
 
 As we also know the learned chromatin states with their chromosome positions (from Roadmap Epigenomics project), we can calculate the following: the % of the GWAS SNP set overlapping with one chromatin state divided by the % of the total segments this chromatin state class makes up. This is the enrichment value we need for down-stream analysis.
 
