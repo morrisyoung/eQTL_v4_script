@@ -64,7 +64,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 ## Expression data processing
 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
-2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 right now.
+2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 currently.
 3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set.
 4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized.
 
