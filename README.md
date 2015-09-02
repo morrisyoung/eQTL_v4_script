@@ -4,11 +4,13 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ==============================================
 
-## Genotype:
+## Genotype
 
 1. genotype\_ld\_prune.py
 
-** Genotype backup (these should happen before above script, as this outputs what's used by above script; this is used in C2B2):
+## Genotype backup
+
+(these should happen before above script, as this outputs what's used by above script; this is used in C2B2)
 
 1. script\_qc\_ld\_pine.py
 
@@ -18,7 +20,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ==============================================
 
-## Expression:
+## Expression
 
 1. sample\_tissue\_preprocess.py
 
@@ -32,7 +34,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 ## Other scripts
 
-(for preprocessing information that may be used by the main routine, or mics):
+(for preprocessing information that may be used by the main routine, or mics)
 
 1. gene\_tss\_prepare.py
 
@@ -50,7 +52,7 @@ All the data files should be in the upper folder of this directory, for appropri
 ==============================================
 ==============================================
 
-The pipeline for genotype QC and LD pruning:
+## The pipeline for genotype QC and LD pruning
 
 As I may use different LD threshold (currently 0.5 for R^2) and the association threshold (currently 0.5 for R^2, the same with previous one) in the future, and there is hard drive usage issue, I record the procedure here.
 
@@ -81,7 +83,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 ==============================================
 ==============================================
 
-Expression data processing:
+## Expression data processing
 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
 
@@ -96,7 +98,9 @@ Expression data processing:
 ==============================================
 ==============================================
 
-Fold enrichment of chromatin states (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project):
+## Fold enrichment of chromatin states
+
+(learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project)
 
 We start from the first paper of this series: “http://www.nature.com/encode/threads/impact-of-functional-information-on-understanding-variation".
 
@@ -211,26 +215,36 @@ E096
 ==============================================
 ==============================================
 
-Statistics and what we have:
+## Statistics and what we have
+
+### Statistics
 
 1. Currently we have 185 individuals, 824,176 SNPs (dosage data), 17 eTissues, 1,889 eSamples, 20,603 non-Null genes. We can load them all into memory.
 
-2. We know the lists of pruned SNPs and un-pruned SNPs (due to LD pruning, after QC), in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.in" or "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.out".
+### Genotype relevant
 
-3. We know the association coefficients (R^2) of pruned SNPs with their representative un-pruned SNPs, in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX.post\_prune.txt".
+1. We know the lists of pruned SNPs and un-pruned SNPs (due to LD pruning, after QC), in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.in" or "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX\_prune.out".
 
-4. We have the dosage data for all un-pruned SNPs in "../genotype\_185\_dosage\_matrix\_qc/chrX/...", and we also have their name and position in the same folder.
+2. We have the dosage data for all un-pruned SNPs in "../genotype\_185\_dosage\_matrix\_qc/chrX/...", and we also have their name and position in the same folder.
 
-5. We have the beta (only significant association) from GTEx project, which we can utilize in the initialization of our learning, in "../GTEx\_Analysis\_V4\_eQTLs/...".
+3. We have the beta (only significant association) from GTEx project, which we can utilize in the initialization of our learning, in "../GTEx\_Analysis\_V4\_eQTLs/...".
 
-6. We have fully processed expression data (remove samples having no genotype and not in eTissues; remove Null genes; quantile normalize across all genes), as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized".
+4. We know the association coefficients (R^2) of pruned SNPs with their representative un-pruned SNPs, in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX.post\_prune.txt".
 
-7. We have the mean expression level (after fully processing, normalized or not) as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized\_tissue\_mean", or "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_tissue\_mean". We also have the learned tissue hierarchy as "../tissue\_hierarchy\_normalized.txt" or "../tissue\_hierarchy\_unnormalized.txt" correspondingly.
+5. We have the enrichment value of chromatin states for all pruned and un-pruned SNPs, in "../prior.score/etissue#/...". Some eTissues don't have this information, as the GTEx tissues are not fully consistent with the Roadmap Epigenomics tissues. We use "../prior.tissue.epigenome.map" to map the eTissues in GTEx to epigenomics in Roadmap, and "../prior.tissue.index.map" to map eTissues to an index for convenience of saving the enrichment values.
 
-8. We have gene TSS as "../gencode.v18.genes.patched\_contigs.gtf\_gene\_tss".
 
-9. As X, Y or MT genes don't have cis- SNPs (we only have autosome genotypes from GTEx), but we still consider them in our framework (they may contribute to some cell env variables), we have list of X, Y and MT genes.
+### Expression relevant
 
-10. We have the sample list of each eTissues (sample size >= 60), as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples", and we further partition them into training set as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_train" and testing set as "phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_test".
+1. We have fully processed expression data (remove samples having no genotype and not in eTissues; remove Null genes; quantile normalize across all genes), as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized".
 
-11. We have the enrichment value of chromatin states for all pruned and un-pruned SNPs, in "../prior.score/etissue#/...". Some eTissues don't have this information, as the GTEx tissues are not fully consistent with the Roadmap Epigenomics tissues. We use "../prior.tissue.epigenome.map" to map the eTissues in GTEx to epigenomics in Roadmap, and "../prior.tissue.index.map" to map eTissues to an index for convenience of saving the enrichment values.
+2. We have the mean expression level (after fully processing, normalized or not) as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized\_tissue\_mean", or "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_tissue\_mean". We also have the learned tissue hierarchy as "../tissue\_hierarchy\_normalized.txt" or "../tissue\_hierarchy\_unnormalized.txt" correspondingly.
+
+3. We have gene TSS as "../gencode.v18.genes.patched\_contigs.gtf\_gene\_tss".
+
+4. As X, Y or MT genes don't have cis- SNPs (we only have autosome genotypes from GTEx), but we still consider them in our framework (they may contribute to some cell env variables), we have list of X, Y and MT genes.
+
+5. We have the sample list of each eTissues (sample size >= 60), as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples", and we further partition them into training set as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_train" and testing set as "phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_test".
+
+6. We have the enrichment value of chromatin states for all pruned and un-pruned SNPs, in "../prior.score/etissue#/...". Some eTissues don't have this information, as the GTEx tissues are not fully consistent with the Roadmap Epigenomics tissues. We use "../prior.tissue.epigenome.map" to map the eTissues in GTEx to epigenomics in Roadmap, and "../prior.tissue.index.map" to map eTissues to an index for convenience of saving the enrichment values.
+
