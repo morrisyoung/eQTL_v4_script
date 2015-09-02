@@ -6,7 +6,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 1. genotype\_ld\_prune.py
 
-## Genotype backup
+### Genotype backup
 
 (these should happen before above script, as this outputs what's used by above script; this is used in C2B2)
 
