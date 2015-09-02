@@ -2,17 +2,15 @@
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
-The order of these scripts are:
-
 ==============================================
 
-** Genotype:
+<h2> Genotype: <h2>
 
 1. genotype\_ld\_prune.py
 
-** Genotype backup (these should happen before above script):
+** Genotype backup (these should happen before above script, as this outputs what's used by above script; this is used in C2B2):
 
-1. script.py
+1. script\_qc\_ld\_pine.py
 
 2. post\_prune.py
 
@@ -24,15 +22,15 @@ The order of these scripts are:
 
 1. sample\_tissue\_preprocess.py
 
-2. eSample\_partition.py
+2. gene\_preprocess.py
 
-3. gene\_preprocess.py
+3. eSample\_partition.py
 
 4. tissue\_hierarchy.py
 
 ==============================================
 
-Other scripts (not necessary in order):
+Other scripts (for preprocessing information that may be used by the main routine, or mics):
 
 1. gene\_tss\_prepare.py
 
@@ -40,12 +38,16 @@ Other scripts (not necessary in order):
 
 3. get\_individual.py
 
-4. practice\_cis\_detect.py
+4. prior\_calculate.py
 
+5. practice\_cis\_detect.py
+
+6. try.py
 
 
 ==============================================
 ==============================================
+
 The pipeline for genotype QC and LD pruning:
 
 As I may use different LD threshold (currently 0.5 for R^2) and the association threshold (currently 0.5 for R^2, the same with previous one) in the future, and there is hard drive usage issue, I record the procedure here.
@@ -71,23 +73,38 @@ rm plink.\*
 
 Then, I need to do the following procedure to get the genotype data (dosage) we can use in learning.
 
-remove QC-ed SNPs from dosage file (simple; to be done with Python, in “/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx\_Pilot\_Imputation.genotype-imputed-data.c1\_dosage\_qc”)
-use the pruned SNP list to calculate the prior information for all un-pruned SNPs (if necessary), and get the potential for all un-pruned SNPs (will do with Python code; find the scheme first)
+1. Remove QC-ed SNPs from dosage file (simple; to be done with Python, in “/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx\_Pilot\_Imputation.genotype-imputed-data.c1\_dosage\_qc”).
 
 
 ==============================================
 ==============================================
+
+Expression data processing:
+
+1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
+
+2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 right now.
+
+3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set.
+
+4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized.
+
+
+
+==============================================
+==============================================
+
 Fold enrichment of chromatin states (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project):
 
 We start from the first paper of this series: “http://www.nature.com/encode/threads/impact-of-functional-information-on-understanding-variation".
 
-From that paper, we use the following file as the GWAS SNPs (originally from NHGRI GWAS SNP catalog June 2011): Gwascatalog.june2011.positions.bed, from “http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration\_data\_jan2011/byDataType/GWAS/jan2011/".
+From that paper, we use the following file as the GWAS SNPs (originally from NHGRI GWAS SNP catalog June 2011): Gwascatalog.june2011.positions.bed, from “http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/supplementary/integration_data_jan2011/byDataType/GWAS/jan2011/".
 
 I treat each snp site as one source, though there may be several snp-phenotype associations at that site. This assumes that the associated phenotypes may be correlated themselves, so that site only contributes once. That’s why we use the above file, "Gwascatalog.june2011.positions.bed".
 
 As we also know the learned chromatin states with their chromosome positions (from Roadmap Epigenomics project), we can calculate the following: the % of the GWAS SNP set overlapping with one chromatin state divided by the % of the total segments this chromatin state class makes up. This is the enrichment value we need for down-stream analysis.
 
-There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig\_tab/nbt.1662\_F4.html". But as there are only 1,640 GWAS SNPs considered, we will not use this smaller version of analysis.
+There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig_tab/nbt.1662_F4.html". But as there are only 1,640 GWAS SNPs considered, we will not use this smaller version of analysis.
 
 Here is a mapping from Roadmap Epigenomics project epigenome to the tissue type we have in GTEx project (reversed) if there is:
 
@@ -191,6 +208,7 @@ E096
 
 ==============================================
 ==============================================
+
 Statistics and what we have:
 
 1. Currently we have 185 individuals, 824,176 SNPs (dosage data), 17 eTissues, 1,889 eSamples, 20,603 non-Null genes. We can load them all into memory.

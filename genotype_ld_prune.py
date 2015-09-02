@@ -1,4 +1,4 @@
-## for doing the data qc for imputed data, with the most strict standard
+## for doing the ld pruning for qc-ed data
 
 ## the input: 1. chunked dosage data (by chromosome and individual); 2. the pruned.in list from the PLINK pruning program
 ## the output: chunked dosage data (by chromosome and individual) with only un-pruned data in
