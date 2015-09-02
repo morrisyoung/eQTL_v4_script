@@ -63,6 +63,7 @@ def snp_cs_map(chr_rep, enrich_rep):
 
 		
 		##===== now calculate =====
+		# record the states of all snps in these two lists
 		state_in_list = []
 		state_out_list = []
 		for i in range(len(prune_in_list)):
@@ -151,21 +152,19 @@ def snp_cs_map(chr_rep, enrich_rep):
 
 
 
-
-
 def cs_portion_gwas_portion(index):
 	## given the epigenome and the GWAS SNPs, calculate:
 	## the portion of chromosome of each chromatin state, and the portion of overlapping GWAS SNPs of each chromatin states
 	## the ratio is indeed the enrichment value of that chromatin states
-
 	##================== the portion of chromosome of each state ========================
 	filename = "../prior.all.mnemonics.bedFiles/" + index + "_15_coreMarks_mnemonics.bed"
 	file = open(filename, 'r')
 
-	state_rep = {}  ## TODO: this is one of what we need finally
+	state_rep = {}  ## key as the state, and value as its portion of the total length of chromosome
 	length_total = 0
 
 	chr_rep = {}  ## key as the chr#, and value is a list of two lists: start_list, state_list
+			## this is to be used later on for binary finding of the chromatin state of one SNP
 
 	while 1:
 		line = (file.readline()).strip()
@@ -200,7 +199,7 @@ def cs_portion_gwas_portion(index):
 		state_rep[state] = state_rep[state] * 1.0 / length_total
 
 
-	print "get chr portion of each state"
+	print "got chr portion of each state"
 
 	''' test
 	print "there are",
@@ -214,7 +213,6 @@ def cs_portion_gwas_portion(index):
 	print "they are summed to",
 	print total
 	'''
-
 
 	##================== the portion of overlapping GWAS SNPs of each chromatin states
 	file = open("../Gwascatalog.june2011.positions.bed", 'r')
@@ -267,7 +265,7 @@ def cs_portion_gwas_portion(index):
 	for state in gwas_rep:
 		gwas_rep[state] = gwas_rep[state] * 1.0 / num_total
 
-	print "get gwas snp portion of each state"
+	print "got gwas snp portion of each state"
 
 
 	# test
@@ -294,7 +292,7 @@ def cs_portion_gwas_portion(index):
 		else:
 			enrich_rep[state] = gwas_rep[state] / state_rep[state]
 
-	print "get enrichment value for each state"
+	print "got enrichment value for each state"
 
 	# test
 	'''
@@ -310,7 +308,7 @@ def cs_portion_gwas_portion(index):
 	print total
 	'''
 
-	print "working on all GTEx snps..."
+	print "working on all GTEx snps (pruned or un-pruned)..."
 
 	(list1, list2) = snp_cs_map(chr_rep, enrich_rep)
 	return (list1, list2)
@@ -321,15 +319,11 @@ def cs_portion_gwas_portion(index):
 
 if __name__ == "__main__":
 
-	
-
 	print "start..."
-
-
-	#for i in range(1, 18):
-	#	os.system("mkdir ../prior.score/etissue" + str(i))
-
-
+	'''
+	for i in range(1, 18):
+		os.system("mkdir ../prior.score/etissue" + str(i))
+	'''
 	tissue_rep = {}
 	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_count_60", 'r')
 	while 1:
@@ -356,8 +350,8 @@ if __name__ == "__main__":
 		tissue_rep[tissue] = epi_list
 	file.close()
 
+	print "we have the eTissues and Epigenomes mapping as following:",
 	print tissue_rep
-
 
 	## build the "prior.tissue.index.map"
 	file = open("../prior.tissue.index.map", 'w')
@@ -413,6 +407,6 @@ if __name__ == "__main__":
 				file.write(str(enrich) + '\n')
 			file.close()
 
-	print "done..."
+	print "done!"
 
 
