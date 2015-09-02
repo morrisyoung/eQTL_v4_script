@@ -83,7 +83,7 @@ As we also know the learned chromatin states with their chromosome positions (fr
 
 I remove all information (learned chromatin states and GWAS SNPs) from X and Y chromatin, as currently we are only interested in the autosome cis- prior for genotypes, and we actually don't have SNPs from X and Y in GTEx project.
 
-There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig_tab/nbt.1662_F4.html". But as there are only 1,640 GWAS SNPs considered, we will not use this smaller version of analysis.
+There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig_tab/nbt.1662_F4.html". But as there are only 1,640 GWAS SNPs (other than 4492 we are using here) considered, we will not use this smaller version of analysis.
 
 Here is a mapping from Roadmap Epigenomics project epigenome to the tissue type we have in GTEx project (reversed) if there is:
 
