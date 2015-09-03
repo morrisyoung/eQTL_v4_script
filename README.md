@@ -193,6 +193,8 @@ E096
 
 There are two types of batch variables: number-valued and string-valued; for number type, if we have any missing value, we won’t use that variable, as there is no unbiased way to impute/quantify that missing number; for string type, we also quantify the missing value (they are already one special class in the original data), which simplifies the whole process. But not sure whether this is good enough. Under this condition, we remove 12 out of 172 individual batch variables, and 3 out of 72 sample batch variables.
 
+The major motivation for this is trying to remove batch variables as few as possible.
+
 The tables we refered are as followed:
 
 #### Individual phenotypes
