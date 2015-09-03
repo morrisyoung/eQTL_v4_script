@@ -90,7 +90,7 @@ I remove all information (learned chromatin states and GWAS SNPs) from X and Y c
 
 There are some ready-to-use results from Roadmap people, in 2010, "Discovery and characterization of chromatin states for systematic annotation of the human genome", in "http://www.nature.com/nbt/journal/v28/n8/fig_tab/nbt.1662_F4.html". But as there are only 1,640 GWAS SNPs (other than 4492 we are using here) considered, we will not use this smaller version of analysis.
 
-Here is a mapping from the eTissues we have in GTEx project to Roadmap Epigenomics project (http://egg2.wustl.edu/roadmap/web_portal/) epigenomes:
+Below is a mapping from the eTissues we have in GTEx project to Roadmap Epigenomics project (http://egg2.wustl.edu/roadmap/web_portal/) epigenomes. There are some approximate mapping, as the tissues in GTEx are not fully consistent with epigenomes in Roadmap Epigenomics. That's why some eTissues have several mapped epigenomes, while some don't have. If one eTissue has several epigenomes, the enrichment score for GTEx snps are everaged from the results from each epigenome.
 
 ```
 Whole Blood:
