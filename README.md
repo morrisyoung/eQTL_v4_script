@@ -199,7 +199,7 @@ The tables we refered are as followed:
 * ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.GTEx_Subject_Phenotypes.data_dict.xml
 * ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.p1.GTEx_Subject_Phenotypes.var_report.xml
 
-#### sample attributes
+#### Sample attributes
 * ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.GTEx_Sample_Attributes.data_dict.xml
 * ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.p1.GTEx_Sample_Attributes.var_report.xml
 
@@ -227,4 +227,8 @@ The tables we refered are as followed:
 * As X, Y or MT genes don't have cis- SNPs (we only have autosome genotypes from GTEx), but we still consider them in our framework (they may contribute to some cell env variables), we have **list of X, Y and MT genes**.
 * We have the **eSample list of each eTissue** (sample size >= 60), as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples", and we further partition them into **training set** as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_train" and **testing set** as "phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_test".
 
+
+### Batch relevant
+
+* We have 160 individual batch variables and 69 sample batch variables, in "../batch\_var\_individual.txt" and "../batch\_var\_sample.txt". They are already quantified and scaled to [0, 1]. There are some original batch variables that are removed, which we discussed above.
 

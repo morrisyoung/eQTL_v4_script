@@ -441,6 +441,9 @@ if __name__ == '__main__':
 	file.close()
 
 
+	print len(sample_batch_var_list)
+
+
 	## sample batch
 	file = open("../batch_var_sample.txt", 'w')
 	file.write('sample\t')
