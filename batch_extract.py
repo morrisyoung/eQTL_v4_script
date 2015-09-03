@@ -12,6 +12,9 @@
 import re
 
 
+
+##================= tissues for this routine ==================
+## There are two types of batch variables: number-valued and string-valued; for number type, if we have any missing value, we won't use that variable, as there is no unbiased way to impute/quantify that missing number; for string type, we also quantify the missing value (they are already one special class in the original data), which simplifies the whole process. But not sure whether this is good enough. Under this condition, we remove 12 out of 172 batch variables.
 def batch_individual_extract():
 
 	individual_batch_var_list = []
@@ -97,8 +100,23 @@ def batch_individual_extract():
 			var_type_rep[var] = type
 	file.close()
 
-	remove_list = ["TRCCLMP", "TRCHSTIN", "TRISCH", "DTHPRNINT"]
-	remove_rep = {"TRCCLMP":1, "TRCHSTIN":1, "TRISCH":1, "DTHPRNINT":1}
+	##================== build the remove_list and remove_rep
+	remove_list = ["TRCCLMP", "TRCHSTIN", "TRISCH", "DTHPRNINT"]  ## this is duplicated variables with others
+	## extend the remove_list and remove_rep by checking missing batch value for all batch variables
+	for index in range(len(individual_var_list)):
+		var = individual_var_list[index]
+		type = var_type_rep[var]
+		count = 0
+		for individual in individual_var_rep:
+			value = individual_var_rep[individual][index]
+			if value == '':
+				count += 1
+		if count > 0 and (type == 'integer' or type == 'decimal'):
+			remove_list.append(var)
+	remove_rep = {}
+	for i in range(len(remove_list)):
+		var = remove_list[i]
+		remove_rep[var] = 1
 
 	##==================== first of all, remove some individual phenotypes from 'remove_rep'
 	remove_index = {}
@@ -106,6 +124,7 @@ def batch_individual_extract():
 		var = individual_var_list[i]
 		if var in remove_rep:
 			remove_index[i] = var
+
 	for i in range(len(individual_var_list)):
 		var = individual_var_list[i]
 		if i not in remove_index:
@@ -118,18 +137,44 @@ def batch_individual_extract():
 				individual_batch_rep[individual].append(value)
 
 	##==================== second, quantify all these batch variables
+	individual_list = []
+	for individual in individual_batch_rep:
+		individual_list.append(individual)
 
-
-
-
-
-
-
-
-
-
-
-
+	remove_list = []  ## if there are too many missing values, we should remove that batch variable
+	for index in range(len(individual_batch_var_list)):
+		var = individual_batch_var_list[index]
+		type = var_type_rep[var]
+		if type == 'integer' or type == 'decimal':
+			value_list = []
+			value_max = 0  ## TODO: the integer and decimal value will be scaled into minimum as 1
+			for i in range(len(individual_list)):
+				individual = individual_list[i]
+				value = individual_batch_rep[individual][index]
+				value = float(value)
+				value_list.append(value)
+				if value > value_max:
+					value_max = value
+			for i in range(len(value_list)):
+				individual = individual_list[i]
+				individual_batch_rep[individual][index] = value_list[i] * 1.0 / value_max
+		else:  ## 'enum_integer' or 'string' types: just quantify them
+			value_list = []
+			value_rep = {}
+			count = 1
+			for i in range(len(individual_list)):
+				individual = individual_list[i]
+				value = individual_batch_rep[individual][index]
+				value_list.append(value)
+				if value not in value_rep:
+					value_rep[value] = count
+					count += 1
+			for value in value_rep:
+				value_rep[value] = value_rep[value] * 1.0 / (count - 1)
+			for i in range(len(value_list)):
+				value = value_list[i]
+				individual = individual_list[i]
+				individual_batch_rep[individual][index] = value_rep[value]
 
 
 	return (individual_batch_var_list, individual_batch_rep)
@@ -224,5 +269,25 @@ if __name__ == '__main__':
 	(individual_batch_var_list, individual_batch_rep) = batch_individual_extract()
 	(sampme_batch_var_list, sample_batch_rep) = batch_sample_extract()
 
-	print "done!"
 
+	## save the results, for individual batches and sample batches
+	## individual batch
+	file = open("../batch_var_individual.txt", 'w')
+	file.write('individual\t')
+	for i in range(len(individual_batch_var_list)):
+		var = individual_batch_var_list[i]
+		file.write(var + '\t')
+	file.write('\n')
+	for individual in individual_batch_rep:
+		file.write(individual + '\t')
+		for i in range(len(individual_batch_rep[individual])):
+			value = individual_batch_rep[individual][i]
+			file.write(str(value) + '\t')
+		file.write('\n')
+	file.close()
+
+
+
+
+
+	print "done!"
