@@ -230,5 +230,5 @@ The tables we refered are as followed:
 
 ### Batch relevant
 
-* We have 160 individual batch variables and 69 sample batch variables, in "../batch\_var\_individual.txt" and "../batch\_var\_sample.txt". They are already quantified and scaled to [0, 1]. There are some original batch variables that are removed, which we discussed above.
+* We have 160 **individual batch variables** and 69 **sample batch variables** for all the genotypes and expression data we use at this time, in "../batch\_var\_individual.txt" and "../batch\_var\_sample.txt". They are already quantified and scaled to [0, 1]. There are some original batch variables that are removed, which we discussed above.
 
