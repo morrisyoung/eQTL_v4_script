@@ -71,7 +71,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
 2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 currently.
 3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set. The training set and testing set are prepared before learning and testing in the main routine.
-4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized. The figures are here: https://drive.google.com/open?id=0B8d7OfcuWeFhfm9yeUpyZUhqeEVfZmN3WWxvZmpPTmZPNFRtd25OQkRvd1JkX3hJdGUyWTg.
+4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized. All these clustering are from the mean expression levels in eTissues. The figures are here: https://drive.google.com/open?id=0B8d7OfcuWeFhfm9yeUpyZUhqeEVfZmN3WWxvZmpPTmZPNFRtd25OQkRvd1JkX3hJdGUyWTg.
 
 
 ## 6. Fold enrichment of chromatin states
@@ -217,14 +217,14 @@ The tables we refered are as followed:
 * We have the **beta** (only significant association) from GTEx project, which we can utilize in the initialization of our learning, in "../GTEx\_Analysis\_V4\_eQTLs/...".
 * We know the **association coefficients (R^2)** of pruned SNPs with their representative un-pruned SNPs, in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX.post\_prune.txt".
 * We have the **enrichment value of chromatin states for all pruned and un-pruned SNPs**, in "../prior.score/etissue#/...". Some eTissues don't have this information, as the GTEx tissues are not fully consistent with the Roadmap Epigenomics tissues. We use "../prior.tissue.epigenome.map" to **map the eTissues in GTEx to epigenomics in Roadmap**, and "../prior.tissue.index.map" to map eTissues to an index for convenience of saving the enrichment values.
-* [to-do] We need the **_prior score_** for all un-pruned SNPs calculated from the above two. This is essentially the penalty item in regression.
+* [to-do] We need the **_prior score_** for all un-pruned SNPs calculated from the above two. This is essentially the penalty item in our regression model.
 
 
 ### Expression relevant
 
 * We have **fully processed expression data** (remove samples having no genotype and not in eTissues; remove Null genes; quantile normalize across all genes), as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized".
 * We have the **mean expression level** (after fully processing, normalized or not) as "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_normalized\_tissue\_mean", or "../GTEx\_Data\_2014-01-17\_RNA-seq\_RNA-SeQCv1.1.8\_gene\_rpkm.gct\_processed\_2\_gene\_tissue\_mean". We also have the learned **tissue hierarchy** as "../tissue\_hierarchy\_normalized.txt" or "../tissue\_hierarchy\_unnormalized.txt" correspondingly.
-* We have **gene TSS** as "../gencode.v18.genes.patched\_contigs.gtf\_gene\_tss".
+* [need further check] We have **gene TSS** as "../gencode.v18.genes.patched\_contigs.gtf\_gene\_tss". This will be used in the main routine to define the cis- region for each studied gene.
 * As X, Y or MT genes don't have cis- SNPs (we only have autosome genotypes from GTEx), but we still consider them in our framework (they may contribute to some cell env variables), we have **list of X, Y and MT genes**.
 * We have the **eSample list of each eTissue** (sample size >= 60), as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples", and we further partition them into **training set** as "../phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_train" and **testing set** as "phs000424.v4.pht002743.v4.p1.c1.GTEx\_Sample\_Attributes.GRU.txt\_tissue\_type\_60\_samples\_test".
 
