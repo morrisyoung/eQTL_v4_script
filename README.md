@@ -4,7 +4,7 @@ The C++ implementation for the learning program is at https://github.com/morrisy
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
-## Genotype
+## 1. Genotype
 
 1. genotype\_ld\_prune.py
 
