@@ -196,12 +196,12 @@ There are two types of batch variables: number-valued and string-valued; for num
 The tables we refered are as followed:
 
 #### Individual phenotypes
-ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.GTEx_Subject_Phenotypes.data_dict.xml
-ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.p1.GTEx_Subject_Phenotypes.var_report.xml
+* ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.GTEx_Subject_Phenotypes.data_dict.xml
+* ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.p1.GTEx_Subject_Phenotypes.var_report.xml
 
 #### sample attributes
-ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.GTEx_Sample_Attributes.data_dict.xml
-ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.p1.GTEx_Sample_Attributes.var_report.xml
+* ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.GTEx_Sample_Attributes.data_dict.xml
+* ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.p1.GTEx_Sample_Attributes.var_report.xml
 
 
 ## Statistics and what we have
