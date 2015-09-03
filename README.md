@@ -71,7 +71,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
 2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 currently.
 3. We randomly select 75% of all eSamples in each eTissue as the training set, and the left as the testing set. The training set and testing set are prepared before learning and testing in the main routine.
-4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized.
+4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized. The figures are here: https://drive.google.com/open?id=0B8d7OfcuWeFhfm9yeUpyZUhqeEVfZmN3WWxvZmpPTmZPNFRtd25OQkRvd1JkX3hJdGUyWTg.
 
 
 ## Fold enrichment of chromatin states
