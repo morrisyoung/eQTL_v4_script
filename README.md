@@ -4,7 +4,7 @@ The C++ implementation for the learning program is at https://github.com/morrisy
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
-## 1. Genotype
+## 1. Genotype processing scripts
 
 1. genotype\_ld\_prune.py
 
@@ -16,7 +16,7 @@ All the data files should be in the upper folder of this directory, for appropri
 2. post\_prune.py
 3. [to-do] dosage\_qc\_chunk.py
 
-## 2. Expression
+## 2. Expression processing scripts
 
 1. sample\_tissue\_preprocess.py
 2. gene\_preprocess.py
