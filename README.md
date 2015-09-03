@@ -31,8 +31,9 @@ All the data files should be in the upper folder of this directory, for appropri
 2. GTEx\_beta\_extract.py
 3. get\_individual.py
 4. prior\_calculate.py
-5. practice\_cis\_detect.py
-6. try.py
+5. batch\_extract.py
+6. practice\_cis\_detect.py
+7. try.py
 
 
 ## The pipeline for genotype QC and LD pruning
@@ -187,6 +188,20 @@ E121
 Lung:
 E096
 ```
+
+## Batch extraction
+
+There are two types of batch variables: number-valued and string-valued; for number type, if we have any missing value, we won’t use that variable, as there is no unbiased way to impute/quantify that missing number; for string type, we also quantify the missing value (they are already one special class in the original data), which simplifies the whole process. But not sure whether this is good enough. Under this condition, we remove 12 out of 172 individual batch variables, and 3 out of 72 sample batch variables.
+
+The tables we refered are as followed:
+
+#### Individual phenotypes
+ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.GTEx_Subject_Phenotypes.data_dict.xml
+ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002742.v4.p1.GTEx_Subject_Phenotypes.var_report.xml
+
+#### sample attributes
+ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.GTEx_Sample_Attributes.data_dict.xml
+ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.p1.GTEx_Sample_Attributes.var_report.xml
 
 
 ## Statistics and what we have
