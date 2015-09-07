@@ -189,6 +189,9 @@ E121
 Lung:
 E096
 ```
+Then, we use these prior information and the associations between pruned SNPs and un-pruned SNPs to calcluate the final prior score for all un-pruned SNPs.
+
+
 
 ## 7. Batch extraction
 
@@ -220,7 +223,7 @@ The tables we refered are as followed:
 * We have the **beta** (only significant association) from GTEx project, which we can utilize in the initialization of our learning, in "../GTEx\_Analysis\_V4\_eQTLs/...".
 * We know the **association coefficients (R^2)** of pruned SNPs with their representative un-pruned SNPs, in "../genotype\_185\_dosage\_matrix\_qc/post\_prune/chrX.post\_prune.txt".
 * We have the **enrichment value of chromatin states for all pruned and un-pruned SNPs**, in "../prior.score/etissue#/...". Some eTissues don't have this information, as the GTEx tissues are not fully consistent with the Roadmap Epigenomics tissues. We use "../prior.tissue.epigenome.map" to **map the eTissues in GTEx to epigenomics in Roadmap**, and "../prior.tissue.index.map" to map eTissues to an index for convenience of saving the enrichment values.
-* [to-do] We need the **_prior score_** for all un-pruned SNPs calculated from the above two. This is essentially the penalty term in our regression model. We have formalized this in https://drive.google.com/open?id=0B8d7OfcuWeFhfjB1dVA5a2NRaXVDVnlWNjhlTldycWhxUVJtUDh2MmZEU3NPdTRWMm8yek0, which needs to be finalized and applied into the data.
+* We get the **_prior score_** for all un-pruned SNPs calculated from the above two, in "../prior.score.unpruned/etissueX/chrY.score" (there is also a mapping file "prior\_tissue\_index.txt" to map the eTissues to their indices). This is essentially the penalty term in our regression model. We have formalized this in https://drive.google.com/open?id=0B8d7OfcuWeFhfjB1dVA5a2NRaXVDVnlWNjhlTldycWhxUVJtUDh2MmZEU3NPdTRWMm8yek0.
 
 
 ### Expression relevant
