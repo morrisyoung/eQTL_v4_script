@@ -31,9 +31,10 @@ All the data files should be in the upper folder of this directory, for appropri
 2. GTEx\_beta\_extract.py
 3. get\_individual.py
 4. prior\_calculate.py
-5. batch\_extract.py
-6. practice\_cis\_detect.py
-7. try.py
+5. prior\_final\_average.py
+6. batch\_extract.py
+7. practice\_cis\_detect.py
+8. try.py
 
 
 ## 4. The pipeline for genotype QC and LD pruning
