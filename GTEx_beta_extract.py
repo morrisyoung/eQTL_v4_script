@@ -44,6 +44,30 @@ if __name__ == '__main__':
 
 
 
+
+	##======== get the pruning association map ========
+	rep_pruned_unpruned = {}
+	rep_all = {}
+	for chr in range(1, 23):
+		file = open("../genotype_185_dosage_matrix_qc/post_prune/chr" + str(chr) + ".post_prune.txt", 'r')
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split("\t")
+			unpruned = line[0]
+			rep_all[unpruned] = 1
+			for i in range(1, len(line)):
+				pair = line[i].split(" ")
+				pruned = pair[0]
+				r2 = float(pair[1])
+				rep_pruned_unpruned[pruned] = (unpruned, r2)
+				rep_all[pruned] = 1
+
+
+	print "*"
+
 	##======== extracting the beta from original files, and saving them into indexed filenames ==========
 	for filename in filename_map:
 		tissue = filename_map[filename]
@@ -77,6 +101,15 @@ if __name__ == '__main__':
 			print line
 			'''
 			
+			if snp_id not in rep_all:
+				continue
+
+			if snp_id in rep_pruned_unpruned:
+				unpruned = rep_pruned_unpruned[snp_id][0]
+				r2 = rep_pruned_unpruned[snp_id][1]
+				snp_id = unpruned
+				beta = str(float(beta) * r2)
+
 			# test the distance between SNP and gene (whether cis-? should be)
 			pos_snp = long(snp_pos)
 			pos_chr = long(gene_pos)
