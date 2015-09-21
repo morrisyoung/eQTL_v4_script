@@ -22,6 +22,7 @@ All the data files should be in the upper folder of this directory, for appropri
 2. gene\_preprocess.py
 3. eSample\_partition.py
 4. tissue\_hierarchy.py
+5. expression\_process.py (further process the expression data, and calculate the principal components for each tissue type)
 
 ## 3. Other scripts
 
