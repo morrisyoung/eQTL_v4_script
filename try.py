@@ -2,9 +2,14 @@
 ## this is really the try.py script
 
 
+import numpy as np
+from sklearn.decomposition import PCA
+
 
 
 if __name__ == '__main__':
+
+
 
 	'''
 	##==== get the gene positions in chromosome#22 ====
@@ -145,3 +150,61 @@ if __name__ == '__main__':
 	file.close()
 	print total
 	'''
+
+
+
+
+
+	''' here is a reference
+	###============== get the linear transformation coefficients for PC1 =================
+	## we have:
+	##  data: (# of genes overall) X (# of samples in this batch)
+	##  X: 1 X (# of samples in this batch)
+	U1 = np.matrix(X) * (np.matrix(data)).getI()
+	U1 = U1.getA1()  # from Matrix to Array
+	sort_index = np.argsort(U1)  # the array of indices that would achieve the sorting
+
+	## save the coefficients in a sorted order
+	file = open("gene_coefficient_batch2.txt", 'w')
+	for i in range(len(U1)):
+		index = sort_index[len(U1) - i - 1]
+		gene = gene_list[index]
+		coefficient = U1[index]
+		file.write(gene + '\t' + str(coefficient) + '\n')
+	file.close()
+	'''
+
+
+
+
+
+
+
+
+	'''
+	##================= test the matrix decomposation (deterministic with PCA)
+	X = np.array([[-1, -1, 1], [-2, -1, -1], [-3, -2, 1], [1, 1, 1], [2, 1, -1], [3, 2, 1]])
+	print "original matrix:"
+	print X
+
+
+	pca = PCA(n_components=2, copy=True, whiten=False)
+	#print pca.fit(X)
+	X1 = pca.fit_transform(X)
+	print "reduced matrix:"
+	print X1
+	print(pca.explained_variance_ratio_)
+
+
+	print "coefficients:"
+	U = (np.matrix(X1)).getI() * np.matrix(X)
+	print "the coefficients between them:"
+	print U
+	#print X
+	#print (np.matrix(X1)) * U
+	U = np.squeeze(np.asarray(U))
+	'''
+
+
+
+
