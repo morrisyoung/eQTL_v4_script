@@ -16,6 +16,7 @@ from sklearn.decomposition import PCA
 
 
 num_cellenv = 400
+num_batch_hidden = 100
 
 
 
@@ -126,11 +127,11 @@ if __name__ == "__main__":
 	for i in range(len(sample_list)):
 		sample = sample_list[i]
 		individual = sample[:9]
+		rep_batch_sample[sample] = []
 		if individual in rep_batch_individual:
 			continue
 		else:
 			rep_batch_individual[individual] = []
-		rep_batch_sample[sample] = []
 
 	## individual batch
 	file = open("../batch_var_individual.txt", 'r')
@@ -148,6 +149,7 @@ if __name__ == "__main__":
 		line = map(lambda x: float(x), line[1:])
 		rep_batch_individual[individual] = line
 	file.close()
+
 	## sample batch
 	file = open("../batch_var_sample.txt", 'r')
 	file.readline()
@@ -165,26 +167,17 @@ if __name__ == "__main__":
 		rep_batch_sample[sample] = line
 	file.close()
 
-
+	## batch matrix
 	batch_matrix = []
 	for i in range(len(sample_list)):
 		sample = sample_list[i]
 		individual = sample[:9]
 		batch_individual = rep_batch_individual[individual][:]
 		batch_sample = rep_batch_sample[sample][:]
-		batch_list = batch_individual.extend(batch_sample)
+		batch_individual.extend(batch_sample)
+		batch_list = batch_individual
 		batch_matrix.append(batch_list)
 	batch_matrix = np.array(batch_matrix)
-
-
-
-	##=================== calculate the principal components (400) of the training samples
-	print "calculating the PCA (400, or num_cellenv)..."
-	pca = PCA(n_components=num_cellenv, copy=True, whiten=False)
-	Y = pca.fit_transform(expression_matrix)
-	#print(pca.explained_variance_ratio_)
-
-
 
 
 
@@ -192,6 +185,13 @@ if __name__ == "__main__":
 	## the folloiwng are for the coefficients between cellenv and gene, and snp and cellenv
 	## this will take "22131.8078818" seconds to finish (including the above code, which takes only a little time)
 	'''
+	##=================== calculate the principal components (400) of the training samples
+	print "calculating the PCA (400, or num_cellenv)..."
+	pca = PCA(n_components=num_cellenv, copy=True, whiten=False)
+	Y = pca.fit_transform(expression_matrix)
+	#print(pca.explained_variance_ratio_)
+
+
 	##=============== cellenv to gene
 	print "learning the coefficients between PCAs and the expression matrix..."
 	U = (np.matrix(Y)).getI() * np.matrix(expression_matrix)
@@ -232,11 +232,22 @@ if __name__ == "__main__":
 
 
 	## working on the two sets of coefficients connected with batch hidden variables
+	##=================== calculate the principal components (num_batch_hidden) of the training samples
+	print "calculating the PCA (num_batch_hidden)..."
+	pca = PCA(n_components=num_batch_hidden, copy=True, whiten=False)
+	Y = pca.fit_transform(expression_matrix)
+	#print(pca.explained_variance_ratio_)
+
+
 	##=============== cellenv to gene
-	print "learning the coefficients between PCAs and the expression matrix..."
+	print "learning the coefficients between PCAs (batch_hidden) and the expression matrix..."
 	U = (np.matrix(Y)).getI() * np.matrix(expression_matrix)
 	U = np.squeeze(np.asarray(U))
 	U = np.transpose(U)
+
+	# test: shuould be num_gene, num_batch_hidden
+	print len(U)
+	print len(U[0])
 
 	## save parameters
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_train_init_batch_hidden_gene", 'w')
@@ -249,12 +260,12 @@ if __name__ == "__main__":
 
 
 	##=============== snp to cellenv
-	print "learning the coefficients between SNP and the PCAs..."
-	U = (np.matrix(snp_matrix)).getI() * (np.matrix(Y))
+	print "learning the coefficients between batch and the PCAs (batch_hidden)..."
+	U = (np.matrix(batch_matrix)).getI() * (np.matrix(Y))
 	U = np.squeeze(np.asarray(U))
 	U = np.transpose(U)
 
-	# test: shuould be num_cellenv, num_snp
+	# test: shuould be num_batch_hidden, num_batch
 	print len(U)
 	print len(U[0])
 
@@ -266,8 +277,6 @@ if __name__ == "__main__":
 			file.write(str(value) + '\t')
 		file.write('\n')
 	file.close()
-
-
 
 
 
