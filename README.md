@@ -22,7 +22,7 @@ All the data files should be in the upper folder of this directory, for appropri
 2. gene\_preprocess.py
 3. eSample\_partition.py
 4. tissue\_hierarchy.py
-5. expression\_process.py (further process the expression data, and calculate the principal components for each tissue type)
+5. para\_init\_hidden\_layer.py (calculate the principal components for the expression matrix to initialize the parameters)
 
 ## 3. Other scripts
 
@@ -240,3 +240,7 @@ The tables we refered are as followed:
 
 * We have 160 **individual batch variables** and 69 **sample batch variables** for all the genotypes and expression data we use at this time, in "../batch\_var\_individual.txt" and "../batch\_var\_sample.txt". They are already quantified and scaled to [0, 1]. There are some original batch variables that are removed, which we discussed above.
 
+
+### Batch relevant
+
+* We calculated the initial values of all the parameters in "../result\_init/". We use matrix multiplication for the parameters connected with the hidden layers (the hidden layers are PCs of the expression matrix). We don' have tissue specificity here, as we can learn this specificity from the samples in each tissue later on.
