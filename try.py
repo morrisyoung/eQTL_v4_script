@@ -206,5 +206,14 @@ if __name__ == '__main__':
 	'''
 
 
+	
+	X = np.array([[-1, -1, 1], [-2, -1, -1], [-3, -2, 1], [1, 1, 1], [2, 1, -1], [3, 2, 1]])
+	print X
+	X1 = (np.matrix(X)).getI()
+	print X1
+
+	Y = X1 * np.matrix(X)
+	print Y
+
 
 
