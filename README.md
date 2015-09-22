@@ -241,6 +241,6 @@ The tables we refered are as followed:
 * We have 160 **individual batch variables** and 69 **sample batch variables** for all the genotypes and expression data we use at this time, in "../batch\_var\_individual.txt" and "../batch\_var\_sample.txt". They are already quantified and scaled to [0, 1]. There are some original batch variables that are removed, which we discussed above.
 
 
-### Batch relevant
+### Parameter initialization
 
 * We calculated the initial values of all the parameters in "../result\_init/". We use matrix multiplication for the parameters connected with the hidden layers (the hidden layers are PCs of the expression matrix). We don' have tissue specificity here, as we can learn this specificity from the samples in each tissue later on.
