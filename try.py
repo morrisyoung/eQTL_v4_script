@@ -206,7 +206,9 @@ if __name__ == '__main__':
 	'''
 
 
-	
+
+
+	'''
 	X = np.array([[-1, -1, 1], [-2, -1, -1], [-3, -2, 1], [1, 1, 1], [2, 1, -1], [3, 2, 1]])
 	print X
 	X1 = (np.matrix(X)).getI()
@@ -214,6 +216,13 @@ if __name__ == '__main__':
 
 	Y = X1 * np.matrix(X)
 	print Y
+	'''
 
 
+
+	list1 = [1,2,3,4]
+	list2 = [2,3,4,5]
+
+	list1.extend(list2)
+	print list1
 

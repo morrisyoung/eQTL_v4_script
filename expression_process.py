@@ -116,7 +116,65 @@ if __name__ == "__main__":
 		snp_matrix.append(snp_list)
 	snp_matrix = np.array(snp_matrix)
 	'''
+
+
 	
+	##=================== query the batch variables (individual batch first, and then sample batch) according to the above list
+	print "get the batch variables for all individuals and samples..."
+	rep_batch_individual = {}
+	rep_batch_sample = {}
+	for i in range(len(sample_list)):
+		sample = sample_list[i]
+		individual = sample[:9]
+		if individual in rep_batch_individual:
+			continue
+		else:
+			rep_batch_individual[individual] = []
+		rep_batch_sample[sample] = []
+
+	## individual batch
+	file = open("../batch_var_individual.txt", 'r')
+	file.readline()
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		individual = line[0]
+		if individual not in rep_batch_individual:
+			continue
+
+		line = map(lambda x: float(x), line[1:])
+		rep_batch_individual[individual] = line
+	file.close()
+	## sample batch
+	file = open("../batch_var_sample.txt", 'r')
+	file.readline()
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		sample = line[0]
+		if sample not in rep_batch_sample:
+			continue
+
+		line = map(lambda x: float(x), line[1:])
+		rep_batch_sample[sample] = line
+	file.close()
+
+
+	batch_matrix = []
+	for i in range(len(sample_list)):
+		sample = sample_list[i]
+		individual = sample[:9]
+		batch_individual = rep_batch_individual[individual][:]
+		batch_sample = rep_batch_sample[sample][:]
+		batch_list = batch_individual.extend(batch_sample)
+		batch_matrix.append(batch_list)
+	batch_matrix = np.array(batch_matrix)
 
 
 
@@ -169,6 +227,48 @@ if __name__ == "__main__":
 		file.write('\n')
 	file.close()
 	'''
+
+
+
+
+	## working on the two sets of coefficients connected with batch hidden variables
+	##=============== cellenv to gene
+	print "learning the coefficients between PCAs and the expression matrix..."
+	U = (np.matrix(Y)).getI() * np.matrix(expression_matrix)
+	U = np.squeeze(np.asarray(U))
+	U = np.transpose(U)
+
+	## save parameters
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_train_init_batch_hidden_gene", 'w')
+	for i in range(len(U)):
+		for j in range(len(U[i])):
+			value = U[i][j]
+			file.write(str(value) + '\t')
+		file.write('\n')
+	file.close()
+
+
+	##=============== snp to cellenv
+	print "learning the coefficients between SNP and the PCAs..."
+	U = (np.matrix(snp_matrix)).getI() * (np.matrix(Y))
+	U = np.squeeze(np.asarray(U))
+	U = np.transpose(U)
+
+	# test: shuould be num_cellenv, num_snp
+	print len(U)
+	print len(U[0])
+
+	## save parameters
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized_train_init_batch_batch_hidden", 'w')
+	for i in range(len(U)):
+		for j in range(len(U[i])):
+			value = U[i][j]
+			file.write(str(value) + '\t')
+		file.write('\n')
+	file.close()
+
+
+
 
 
 
