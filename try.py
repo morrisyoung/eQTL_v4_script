@@ -219,10 +219,3 @@ if __name__ == '__main__':
 	'''
 
 
-
-	list1 = [1,2,3,4]
-	list2 = [2,3,4,5]
-
-	list1.extend(list2)
-	print list1
-

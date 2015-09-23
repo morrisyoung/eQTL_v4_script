@@ -1,7 +1,6 @@
-## this is used to initialzie the cis- parameters (actually learn these parameters from multi-linear regression)
+## this is used to test the init parameters of the cis- xxx
+## I will calculate the predicted rpkm for all samples, and compare that with the true rpkm, and draw the comparison plot
 ## the learned parameters have no tissue specificity (that's why this is only the initialization)
-## the results are saved in "../result_init/para_init_train_cis.txt", each line is for one gene (several SNPs are in the cis- region of this gene)
-## we can later on use the same script to test the prediction precision, and draw the plot for all the 20603 genes
 
 
 import time
@@ -55,8 +54,11 @@ def snp_dosage_load():
 
 if __name__ == "__main__":
 
-	print "working on the multi-linear regression of cis- SNPs for all genes"
+	print "testing the multi-linear parameters..."
 	time_start = time.time()
+
+
+
 
 
 	##===================================================== genotype =====================================================
@@ -91,6 +93,10 @@ if __name__ == "__main__":
 			pos = int(line[1])
 			snp_pos_list[i].append(pos)
 		file.close()
+
+
+
+
 
 
 	##===================================================== expression =====================================================
@@ -198,44 +204,10 @@ if __name__ == "__main__":
 
 
 
+
+
+
 	##===================================================== cis- region definition =====================================================
-	'''
-	# gene_cis_index
-	for i in range(len(gene_list)):
-		gene = gene_list[i]
-
-		if gene in gene_xymt_rep:
-			continue
-
-		chr = int(gene_tss[gene][0])
-		tss = gene_tss[gene][1]
-
-		flag1 = 0
-		flag2 = 0
-		start = 0
-		end = 0
-		for j in range(len(snp_pos_list[chr-1])):
-			if flag1 == 0:
-				if (snp_pos_list[chr-1][j] - tss >= -1000000) and (snp_pos_list[chr-1][j] - tss <= 1000000):
-					start = j
-					flag1 = 1
-			if flag1 == 1 and flag2 == 0:
-				if (snp_pos_list[chr-1][j] - tss >= -1000000) and (snp_pos_list[chr-1][j] - tss <= 1000000):
-					end = j
-				else:
-					flag2 = 1;
-			if (flag1 == 1) and (flag2 == 1):
-				break
-
-		gene_cis_index[gene] = (start, end)
-
-	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_cis_range", 'w')
-	for gene in gene_cis_index:
-		start = gene_cis_index[gene][0]
-		end = gene_cis_index[gene][1]
-		file.write(gene + '\t' + str(start) + '\t' + str(end) + '\n')
-	file.close()
-	'''
 
 
 	gene_cis_index = {}
@@ -311,3 +283,6 @@ if __name__ == "__main__":
 	time_end = time.time()
 	print "time spent on this gene is",
 	print time_end - time_start
+
+
+
