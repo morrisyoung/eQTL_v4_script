@@ -28,6 +28,9 @@ color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 
 if __name__ == "__main__":
 
 
+
+
+
 	##===================================================== genes =====================================================
 	##=================== gene_list
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
@@ -83,44 +86,67 @@ if __name__ == "__main__":
 
 
 
-	##===================================================== load corr_rep =====================================================
-	corr_rep = {}
-	file = open("../result_init/para_init_train_cis_corr.txt", 'r')
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
 
-		line = line.split('\t')
-		gene = line[0]
-		corr = float(line[1])
-		corr_rep[gene] = corr
-	file.close()
+	for tissue_index in range(1, 18):
 
 
+		##===================================================== tissue_type =====================================================
+		tissue_type = ""
+		file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train", 'r')
+		count = 0
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
 
-	##===================================================== plot =====================================================
-	# with gene_list and corr_rep
-	plt.figure(1)
-	for i in range(len(gene_list)):
-		gene = gene_list[i]
-		if gene in gene_xymt_rep:
-			continue
-		if gene not in corr_rep:
-			continue
-		corr = corr_rep[gene]
-		
-		chr = int(gene_tss[gene][0])
-		color = color_table[chr-1]
-		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
-
-
-	plt.axis([0, 20000, -1, 1])
-	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
-	plt.ylabel('Pearson correlation of gene expression level')
-	plt.title('Model testing for the multi-linear regression of cis- SNPs (+-1Mb)')
-	plt.grid(True)
+			count += 1
+			if count == tissue_index:
+				line = line.split('\t')
+				tissue_type = line[0]
+				break
+		file.close()
+		print "working on tissue",
+		print tissue_type
 
 
-	plt.show()
+		##===================================================== load corr_rep =====================================================
+		corr_rep = {}
+		file = open("../result_init/para_init_train_cis_corr_tissues/para_corr_" + str(tissue_index) + ".txt", 'r')
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split('\t')
+			gene = line[0]
+			corr = float(line[1])
+			corr_rep[gene] = corr
+		file.close()
+
+
+
+		##===================================================== plot =====================================================
+		# with gene_list and corr_rep
+		plt.figure(1)
+		for i in range(len(gene_list)):
+			gene = gene_list[i]
+			if gene in gene_xymt_rep:
+				continue
+			if gene not in corr_rep:
+				continue
+			corr = corr_rep[gene]
+			
+			chr = int(gene_tss[gene][0])
+			color = color_table[chr-1]
+			plt.plot(i, corr, color, marker = 'o', alpha=0.7)
+
+
+		plt.axis([0, 20000, -1, 1])
+		plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
+		plt.ylabel('Pearson correlation of gene expression level')
+		plt.title('Model testing (' + tissue_type + ') for the multi-linear regression of cis- SNPs (+-1Mb)')
+		plt.grid(True)
+
+
+		plt.show()
 
