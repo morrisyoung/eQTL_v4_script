@@ -26,8 +26,8 @@ All the data files should be in the upper folder of this directory, for appropri
 ## 3. Initialization scripts
 
 1. para\_init\_hidden\_layer.py (calculate the principal components for the expression matrix to initialize the parameters)
-2. para\_init\_cis\_learn.py
-3. para\_init\_cis\_corr.py
+2. para\_init\_cis\_learn.py (multi-linear model)
+3. para\_init\_cis\_corr.py (Pearson correlation of predicted results and real expression values)
 4. para\_init\_cis\_corr\_plot.py (Manhattan stype plotting)
 5. para\_init\_cis\_tissues.py (the above three don't have tissue specificity, but this one will learn the parameters fro each tissue, with limited sample size)
 6. para\_init\_cis\_tissues\_plot.py (Manhattan stype plotting)
