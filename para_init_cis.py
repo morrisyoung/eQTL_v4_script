@@ -295,9 +295,9 @@ if __name__ == "__main__":
 		except ValueError:
 			print genotype_matrix
 			## write the matrix into a file
-			file = open("temp_" + gene + ".txt", 'w')
+			file = open("./temp/" + gene + ".txt", 'w')
 			for i in range(len(genotype_matrix)):
-				for j in range(genotype_matrix[i]):
+				for j in range(len(genotype_matrix[i])):
 					dosage = genotype_matrix[i][j]
 					file.write(str(dosage) + '\t')
 				file.write('\n')

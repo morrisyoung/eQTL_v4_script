@@ -245,6 +245,9 @@ if __name__ == "__main__":
 		if gene in gene_xymt_rep:
 			continue
 
+		if gene not in para_rep:
+			continue
+
 		chr = int(gene_tss[gene][0])
 		start = gene_cis_index[gene][0]
 		end = gene_cis_index[gene][1]
@@ -285,6 +288,10 @@ if __name__ == "__main__":
 	plt.figure(1)
 	for i in range(len(gene_list)):
 		gene = gene_list[i]
+		if gene in gene_xymt_rep:
+			continue
+		if gene not in corr_rep:
+			continue
 		corr = corr_rep[gene]
 		plt.plot(i, corr, 'bo')
 
