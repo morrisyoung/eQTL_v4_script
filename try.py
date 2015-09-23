@@ -4,6 +4,7 @@
 
 import numpy as np
 from sklearn.decomposition import PCA
+from scipy.stats.stats import pearsonr
 
 
 
@@ -219,3 +220,8 @@ if __name__ == '__main__':
 	'''
 
 
+
+
+	a = np.array([-1,-2,-3,-4,-5,-6])
+	b = np.array([1.1,1.9,3,4,5,6])
+	print np.corrcoef(a,b)[0][1]

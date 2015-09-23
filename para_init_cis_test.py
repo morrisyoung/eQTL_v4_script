@@ -5,6 +5,7 @@
 
 import time
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # global variables definition and initialization
@@ -27,7 +28,9 @@ gene_xymt_rep = {}		# map all the X, Y, MT genes
 gene_cis_index = {}		# mapping the gene to cis snp indices (start position and end position in the snp vector)
 
 # result table:
-para_rep = {}
+para_rep = {}			# the learned cis- parameters for all the non-xymt genes
+corr_rep = {}			# correlation of expected expression level and the real expression level
+
 
 
 
@@ -56,9 +59,6 @@ if __name__ == "__main__":
 
 	print "testing the multi-linear parameters..."
 	time_start = time.time()
-
-
-
 
 
 	##===================================================== genotype =====================================================
@@ -96,13 +96,10 @@ if __name__ == "__main__":
 
 
 
-
-
-
 	##===================================================== expression =====================================================
 	##================== get the current training tissues and samples inside (list)
-	print "get training samples..."
-	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train", 'r')
+	print "get testing samples..."
+	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test", 'r')
 	sample_rep = {}
 	while 1:
 		line = (file.readline()).strip()
@@ -122,7 +119,7 @@ if __name__ == "__main__":
 
 
 	##=================== query the RPKM according to the above list
-	print "get expression matrix for these training samples..."
+	print "get expression matrix for these testing samples..."
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
 
 	###
@@ -205,11 +202,7 @@ if __name__ == "__main__":
 
 
 
-
-
 	##===================================================== cis- region definition =====================================================
-
-
 	gene_cis_index = {}
 	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_cis_range", 'r')
 	while 1:
@@ -226,7 +219,24 @@ if __name__ == "__main__":
 
 
 
-	##===================================================== regression across all genes =====================================================
+	##===================================================== load all the parameters =====================================================
+	file = open("../result_init/para_init_train_cis.txt", 'r')
+	para_rep = {}
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		gene = line[0]
+		para_list = map(lambda x: float(x), line[1:])
+		para_rep[gene] = para_list
+	file.close()
+
+
+
+	##===================================================== testing all genes =====================================================
+	corr_rep = {}
 	for i in range(len(gene_list)):
 
 		gene = gene_list[i]
@@ -240,42 +250,46 @@ if __name__ == "__main__":
 		end = gene_cis_index[gene][1]
 
 		##
-		expression_array = []
+		expression_array_real = []
 		for j in range(len(sample_list)):
 			rpkm = expression_matrix[j][i]
-			expression_array.append(rpkm)
-		expression_array = np.array(expression_array)
+			expression_array_real.append(rpkm)
+		expression_array_real = np.array(expression_array_real)
 
 		##
-		genotype_matrix = []
+		expression_array_exp = []
 		for j in range(len(sample_list)):
+			genotype_array = []
 			sample = sample_list[j]
-			genotype_matrix.append([])
 			individual = sample[:9]
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
-				genotype_matrix[j].append(dosage)
-			genotype_matrix[j].append(1)  # we need the intercept
-		genotype_matrix = np.array(genotype_matrix)
-		## sample:
-		#X = np.array([[1,2,3,1], [2,4,6,1], [3,6,9,1]])  # 1x1 + 2x2 + 3x3 + 1
-		#y = np.array([14, 28, 42])
-		#y = np.array([15, 29, 44])
-		#m = np.linalg.lstsq(X, y)[0]
-		m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
-		para_rep[gene] = m  ## there is an extra intercept here!!!
+				genotype_array.append(dosage)
+			genotype_array.append(1)  # we need the intercept
+			## expected expression level
+			rpkm = 0
+			for k in range(len(genotype_array)):
+				rpkm += genotype_array[k] * para_rep[gene][k]
+			expression_array_exp.append(rpkm)
+		expression_array_exp = np.array(expression_array_exp)
+
+		##
+		corr = np.corrcoef(expression_array_real, expression_array_exp)[0][1]
+		corr_rep[gene] = corr
 
 
-	##===================================================== save all learned parameters =====================================================
-	file = open("../result_init/para_init_train_cis.txt", 'w')
-	for gene in para_rep:
-		para_list = para_rep[gene]
-		file.write(gene + '\t')
-		for i in range(len(para_list)):
-			para = para_list[i]
-			file.write(str(para) + '\t')
-		file.write('\n')
-	file.close()
+
+
+	##===================================================== plot =====================================================
+	# with gene_list and corr_rep
+	plt.figure(1)
+	for i in range(len(gene_list)):
+		gene = gene_list[i]
+		corr = corr_rep[gene]
+		plt.plot(i, corr, 'bo')
+
+	plt.show()
+
 
 
 
