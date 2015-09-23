@@ -20,6 +20,10 @@ gene_xymt_rep = {}		# map all the X, Y, MT genes
 corr_rep = {}			# correlation of expected expression level and the real expression level
 
 
+# information table (colors)
+color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
+
+
 
 if __name__ == "__main__":
 
@@ -27,6 +31,7 @@ if __name__ == "__main__":
 	##===================================================== genes =====================================================
 	##=================== gene_list
 	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
+	file.readline()
 	file.readline()
 	file.readline()
 	gene_list = []
@@ -104,7 +109,17 @@ if __name__ == "__main__":
 		if gene not in corr_rep:
 			continue
 		corr = corr_rep[gene]
-		plt.plot(i, corr, 'bo')
+		
+		chr = int(gene_tss[gene][0])
+		color = color_table[chr-1]
+		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
+
+
+	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
+	plt.ylabel('Pearson correlation of gene expression level')
+	plt.title('Model testing for the multi-linear regression of cis- SNPs (+-1Mb)')
+	plt.grid(True)
+
 
 	plt.show()
 

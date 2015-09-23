@@ -1,11 +1,18 @@
-## this is used to initialzie the cis- parameters (actually learn these parameters from multi-linear regression)
-## the learned parameters have no tissue specificity (that's why this is only the initialization)
-## the results are saved in "../result_init/para_init_train_cis.txt", each line is for one gene (several SNPs are in the cis- region of this gene)
-## we can later on use the same script to test the prediction precision, and draw the plot for all the 20603 genes
+## learn cis- parameters for one tissue
+## calculate the Pearson correlation coefficient
+## this won't be used for initialization; this will only be used for drawing the plots
+## results in "../result_init//para_init_train_cis_corr_tissues/", one file for one tissue
+
+## don't remember to use the argument to specify the current tissue type
+
 
 
 import time
 import numpy as np
+import sys
+
+
+
 
 
 # global variables definition and initialization
@@ -29,6 +36,13 @@ gene_cis_index = {}		# mapping the gene to cis snp indices (start position and e
 
 # result table:
 para_rep = {}
+corr_rep = {}			# correlation of expected expression level and the real expression level
+
+
+
+tissue_index = 0
+tissue_type = ""
+
 
 
 
@@ -44,7 +58,7 @@ def snp_dosage_load():
 				line = (file.readline()).strip()
 				if not line:
 					break
- 
+
 				dosage = float(line)
 				snp_dosage_rep[individual][i].append(dosage)
 			file.close()
@@ -54,6 +68,13 @@ def snp_dosage_load():
 
 
 if __name__ == "__main__":
+
+
+	tissue_index = int(sys.argv[1])
+	print "working on tissue#",
+	print tissue_index
+
+
 
 	print "working on the multi-linear regression of cis- SNPs for all genes"
 	time_start = time.time()
@@ -98,21 +119,30 @@ if __name__ == "__main__":
 	print "get training samples..."
 	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train", 'r')
 	sample_rep = {}
+	count = 0
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
 			break
 
-		line = line.split('\t')
-		tissue = line[0]
-		sample_list = line[1:]
+		count += 1
+		if count == tissue_index:
+			line = line.split('\t')
+			tissue_type = line[0]
+			sample_list = line[1:]
 
+			for i in range(len(sample_list)):
+				sample = sample_list[i]
+				sample_rep[sample] = []
 
-		for i in range(len(sample_list)):
-			sample = sample_list[i]
-			sample_rep[sample] = []
-
+			break
 	file.close()
+
+	print "we are working on tissue",
+	print tissue_type,
+	print ", and there are",
+	print len(sample_rep),
+	print "training samples.."
 
 
 	##=================== query the RPKM according to the above list
@@ -199,45 +229,6 @@ if __name__ == "__main__":
 
 
 	##===================================================== cis- region definition =====================================================
-	'''
-	# gene_cis_index
-	for i in range(len(gene_list)):
-		gene = gene_list[i]
-
-		if gene in gene_xymt_rep:
-			continue
-
-		chr = int(gene_tss[gene][0])
-		tss = gene_tss[gene][1]
-
-		flag1 = 0
-		flag2 = 0
-		start = 0
-		end = 0
-		for j in range(len(snp_pos_list[chr-1])):
-			if flag1 == 0:
-				if (snp_pos_list[chr-1][j] - tss >= -1000000) and (snp_pos_list[chr-1][j] - tss <= 1000000):
-					start = j
-					flag1 = 1
-			if flag1 == 1 and flag2 == 0:
-				if (snp_pos_list[chr-1][j] - tss >= -1000000) and (snp_pos_list[chr-1][j] - tss <= 1000000):
-					end = j
-				else:
-					flag2 = 1;
-			if (flag1 == 1) and (flag2 == 1):
-				break
-
-		gene_cis_index[gene] = (start, end)
-
-	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_cis_range", 'w')
-	for gene in gene_cis_index:
-		start = gene_cis_index[gene][0]
-		end = gene_cis_index[gene][1]
-		file.write(gene + '\t' + str(start) + '\t' + str(end) + '\n')
-	file.close()
-	'''
-
-
 	gene_cis_index = {}
 	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_cis_range", 'r')
 	while 1:
@@ -255,6 +246,7 @@ if __name__ == "__main__":
 
 
 	##===================================================== regression across all genes =====================================================
+	para_rep = {}
 	for i in range(len(gene_list)):
 
 		gene = gene_list[i]
@@ -285,28 +277,14 @@ if __name__ == "__main__":
 				genotype_matrix[j].append(dosage)
 			genotype_matrix[j].append(1)  # we need the intercept
 		genotype_matrix = np.array(genotype_matrix)
-		## sample:
-		#X = np.array([[1,2,3,1], [2,4,6,1], [3,6,9,1]])  # 1x1 + 2x2 + 3x3 + 1
-		#y = np.array([14, 28, 42])
-		#y = np.array([15, 29, 44])
-		#m = np.linalg.lstsq(X, y)[0]
-		try:
-			m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
-			para_rep[gene] = m  ## there is an extra intercept here!!!
-		except ValueError:
-			print genotype_matrix
-			## write the matrix into a file
-			file = open("./temp/" + gene + ".txt", 'w')
-			for i in range(len(genotype_matrix)):
-				for j in range(len(genotype_matrix[i])):
-					dosage = genotype_matrix[i][j]
-					file.write(str(dosage) + '\t')
-				file.write('\n')
-			file.close()
+
+		m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
+		para_rep[gene] = m  ## there is an extra intercept here!!!
 
 
-	##===================================================== save all learned parameters =====================================================
-	file = open("../result_init/para_init_train_cis.txt", 'w')
+
+	##============================================= save all learned parameters, for this tissue ===============================================
+	file = open("../result_init/para_init_train_cis_corr_tissues/para_" + str(tissue_index) + ".txt", 'w')
 	for gene in para_rep:
 		para_list = para_rep[gene]
 		file.write(gene + '\t')
@@ -318,7 +296,143 @@ if __name__ == "__main__":
 
 
 
+
+
+	####
+	#### section#2
+	####
+	#### testing starts from here
+	####
+
+
+
+
+
+
+
+	##===================================================== expression =====================================================
+	##================== get the current training tissues and samples inside (list)
+	print "get testing samples..."
+	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test", 'r')
+	sample_rep = {}
+	count = 0
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		count += 1
+		if count == tissue_index:
+			line = line.split('\t')
+			sample_list = line[1:]
+
+			for i in range(len(sample_list)):
+				sample = sample_list[i]
+				sample_rep[sample] = []
+			break
+	file.close()
+
+	##=================== query the RPKM according to the above list
+	print "get expression matrix for these testing samples..."
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
+
+	###
+	file.readline()
+	file.readline()
+	sample_list = ((file.readline()).strip()).split('\t')[2:]
+	index_rep = {}
+	for i in range(len(sample_list)):
+		sample = sample_list[i]
+		if sample in sample_rep:
+			index_rep[i] = sample
+
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		rpkm_list = map(lambda x: float(x), line[2:])
+
+		for i in range(len(rpkm_list)):
+			rpkm = rpkm_list[i]
+			if i in index_rep:
+				sample = index_rep[i]
+				sample_rep[sample].append(rpkm)
+	file.close()
+
+	### this is crucial for building the expression matrix, as we need the order of all samples
+	sample_list = []
+	for sample in sample_rep:
+		sample_list.append(sample)
+
+	###
+	expression_matrix = []
+	for i in range(len(sample_list)):
+		sample = sample_list[i]
+		expression_matrix.append(sample_rep[sample])
+	expression_matrix = np.array(expression_matrix)
+
+
+	##===================================================== testing all genes, get the corr_rep =====================================================
+	corr_rep = {}
+	for i in range(len(gene_list)):
+		gene = gene_list[i]
+		print gene
+
+		if gene in gene_xymt_rep:
+			continue
+		if gene not in para_rep:
+			continue
+
+		chr = int(gene_tss[gene][0])
+		start = gene_cis_index[gene][0]
+		end = gene_cis_index[gene][1]
+
+		##
+		expression_array_real = []
+		for j in range(len(sample_list)):
+			rpkm = expression_matrix[j][i]
+			expression_array_real.append(rpkm)
+		expression_array_real = np.array(expression_array_real)
+
+		##
+		expression_array_exp = []
+		for j in range(len(sample_list)):
+			genotype_array = []
+			sample = sample_list[j]
+			individual = sample[:9]
+			for k in range(start, end+1):
+				dosage = snp_dosage_rep[individual][chr-1][k]
+				genotype_array.append(dosage)
+			genotype_array.append(1)  # we need the intercept
+			## expected expression level
+			rpkm = 0
+			for k in range(len(genotype_array)):
+				rpkm += genotype_array[k] * para_rep[gene][k]
+			expression_array_exp.append(rpkm)
+		expression_array_exp = np.array(expression_array_exp)
+
+		##
+		corr = np.corrcoef(expression_array_real, expression_array_exp)[0][1]
+		corr_rep[gene] = corr
+
+
+
+
+	##===================================================== save corr_rep =====================================================
+	file = open("../result_init/para_init_train_cis_corr_tissues/para_corr_" + str(tissue_index) + ".txt", 'w')
+	for gene in corr_rep:
+		file.write(gene + '\t' + str(corr_rep[gene]) + '\n')
+	file.close()
+
+
+
+
+
 	##======== timing
 	time_end = time.time()
 	print "time spent on this gene is",
 	print time_end - time_start
+
+

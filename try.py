@@ -5,6 +5,7 @@
 import numpy as np
 from sklearn.decomposition import PCA
 from scipy.stats.stats import pearsonr
+import matplotlib.pyplot as plt
 
 
 
@@ -222,6 +223,114 @@ if __name__ == '__main__':
 
 
 
+
+	''' Pearson correlation
 	a = np.array([-1,-2,-3,-4,-5,-6])
 	b = np.array([1.1,1.9,3,4,5,6])
 	print np.corrcoef(a,b)[0][1]
+	'''
+
+
+
+
+	'''
+	# there are something wrong for the learned cis- parameters in laptop
+	#target = "ENSG00000170801.5"  ## start: 3548; end: 5397; some data are missed
+	target = "ENSG00000071655.12"  ## I catched this exception, but the learned parameters are wrong (this is reasonable)
+
+	file = open("../result_init/para_init_train_cis.txt", 'r')
+	list = []
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		gene = line[0]
+		if gene != target:
+			continue
+		else:
+			print gene,
+			print len(line) - 1
+			break
+	file.close()
+	#print len(list)
+	#print list
+	'''
+
+
+
+
+
+
+
+
+	'''
+	#gencode.v18.genes.patched_contigs.gtf_gene_xymt
+	file = open("../GTEx_Data_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct_processed_2_gene_normalized", 'r')
+	file.readline()
+	file.readline()
+	file.readline()
+	gene_list = []
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		gene = line[0]
+		gene_list.append(gene)
+	file.close()
+
+
+	###
+	gene_xymt_rep = {}
+	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_xymt", 'r')
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		gene = line
+		gene_xymt_rep[gene] = 1
+	file.close()
+
+
+	count = 0
+	for i in range(len(gene_list)):
+		gene = gene_list[i]
+		if gene not in gene_xymt_rep:
+			count += 1
+
+	print count
+	'''
+
+
+
+	'''
+	file = open("../result_init/para_init_train_cis_corr.txt", 'r')
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		gene = line[0]
+	'''
+
+
+
+
+
+	colors = {u'c': (0.0, 0.75, 0.75), u'b': (0.0, 0.0, 1.0), u'w': (1.0, 1.0, 1.0), u'g': (0.0, 0.5, 0.0), u'y': (0.75, 0.75, 0), u'k': (0.0, 0.0, 0.0), u'r': (1.0, 0.0, 0.0), u'm': (0.75, 0, 0.75), u'a': (1.0, 1.0, 1.0)}
+
+
+	plt.figure(1)
+	plt.plot([1,2,3], ["nan", 2,3], '#feffb3', marker = 'o')
+
+
+	plt.plot([4,5], [4,5], '#eeeeee', marker = 'o')
+	plt.axis([0, 6, 0, 10])
+
+	plt.show()
+
