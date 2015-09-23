@@ -22,9 +22,17 @@ All the data files should be in the upper folder of this directory, for appropri
 2. gene\_preprocess.py
 3. eSample\_partition.py
 4. tissue\_hierarchy.py
-5. para\_init\_hidden\_layer.py (calculate the principal components for the expression matrix to initialize the parameters)
 
-## 3. Other scripts
+## 3. Initialization scripts
+
+1. para\_init\_hidden\_layer.py (calculate the principal components for the expression matrix to initialize the parameters)
+2. para\_init\_cis\_learn.py
+3. para\_init\_cis\_corr.py
+4. para\_init\_cis\_corr\_plot.py (Manhattan stype plotting)
+5. para\_init\_cis\_tissues.py (the above three don't have tissue specificity, but this one will learn the parameters fro each tissue, with limited sample size)
+6. para\_init\_cis\_tissues\_plot.py (Manhattan stype plotting)
+
+## 4. Other scripts
 
 (for preprocessing information that may be used by the main routine, or mics)
 
