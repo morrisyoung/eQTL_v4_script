@@ -290,7 +290,20 @@ if __name__ == "__main__":
 		#y = np.array([14, 28, 42])
 		#y = np.array([15, 29, 44])
 		#m = np.linalg.lstsq(X, y)[0]
-		m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
+		try:
+			m = np.linalg.lstsq(genotype_matrix, expression_array)[0]
+		except ValueError:
+			print genotype_matrix
+			## write the matrix into a file
+			file = open("temp_" + gene + ".txt", 'w')
+			for i in range(len(genotype_matrix)):
+				for j in range(genotype_matrix[i]):
+					dosage = genotype_matrix[i][j]
+					file.write(str(dosage) + '\t')
+				file.write('\n')
+			file.close()
+
+
 		para_rep[gene] = m  ## there is an extra intercept here!!!
 
 
