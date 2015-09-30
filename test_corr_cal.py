@@ -1,10 +1,4 @@
-## this is used to test the init parameters of the cis- coefficients (the parameters are learned from multi-linear regression with least squire error)
-## I will calculate the predicted rpkm for all samples, and compare that with the true rpkm, and get the correlation for all genes
-## the learned parameters have no tissue specificity (that's why this is only the initialization)
-
-## there are two issues to notice:
-##	1. there are several genes that have some problems and we can't get the regression coefficients (maybe the SNPs have NULL value)
-##	2. in the processed genes (20603 genes), we don't consider the XYMT genes
+## calculate the Pearson correlation on testing dataset
 
 
 import time
@@ -15,7 +9,7 @@ import matplotlib.pyplot as plt
 
 # global variables definition and initialization
 num_gene = 0			# TBD
-num_etissue = 17		# here specified, as we know that already
+num_etissue = 0			# TBD
 
 
 # expression:
@@ -39,7 +33,7 @@ if __name__ == "__main__":
 	time_start = time.time()
 
 
-	##===================================================== expression =====================================================
+	##===================================================== expression (real) =====================================================
 	##================== get the current training tissues and samples inside (list)
 	print "get testing samples..."
 	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test", 'r')
@@ -115,7 +109,7 @@ if __name__ == "__main__":
 
 
 
-
+	##===================================================== corr (for each tissue) =====================================================
 	##===== we will work on each tissue
 	## get the etissue_rep first
 	file = open("../result_predict/etissue_list.txt", 'r')
@@ -129,6 +123,8 @@ if __name__ == "__main__":
 		etissue_index = int(line[1])
 		etissue_rep[etissue] = etissue_index
 	file.close()
+
+	num_etissue = len(etissue_rep)
 
 
 	for etissue in etissue_rep:
@@ -152,7 +148,6 @@ if __name__ == "__main__":
 		corr_rep = {}
 		for i in range(len(gene_list)):
 			gene = gene_list[i]
-
 
 			##
 			expression_array_real = []
