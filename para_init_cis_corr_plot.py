@@ -114,6 +114,11 @@ if __name__ == "__main__":
 		color = color_table[chr-1]
 		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
 
+		## add the gene id if the corr is high enough
+		if corr >= 0.5:
+			print gene,
+			print corr
+
 
 	plt.axis([0, 20000, -1, 1])
 	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
