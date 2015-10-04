@@ -11,6 +11,10 @@ num_gene = 0			# TBD
 # expression:
 gene_list = []			# all genes from the source file
 gene_index_map = {}		# re-map those genes into their order (reversed hashing of above)
+etissue_rep = {}		# mapping all etissues to their indices in filing
+gene_chr_map = {}		# we need the chr of genes to diff-color them
+
+
 
 # result table:
 corr_rep = {}			# correlation of expected expression level and the real expression level

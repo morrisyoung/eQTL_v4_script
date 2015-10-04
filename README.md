@@ -46,7 +46,7 @@ All the data files should be in the upper folder of this directory, for appropri
 the following are testing relevant:
 
 7. test\_corr\_cal.py (from the predicted expression, calculate the corr with the real data in the testing dataset)
-8. test\_corr\_plot.py (plot the corr, in different tissues)
+8. test\_corr\_plot.py (plot the corr calculated from above script, in different tissues)
 
 the following are the real misc:
 
