@@ -43,10 +43,13 @@ All the data files should be in the upper folder of this directory, for appropri
 5. prior\_final\_average.py
 6. batch\_extract.py
 7. practice\_cis\_detect.py
-8. try.py
+the following are
+8. test_corr_cal.py
+9.
+10. try.py
 
 
-## 4. The pipeline for genotype QC and LD pruning
+## 5. The pipeline for genotype QC and LD pruning
 
 As I may use different LD threshold (currently 0.5 for R^2) and the association threshold (currently 0.5 for R^2, the same with previous one) in the future, and there is hard drive usage issue, I record the procedure here.
 
@@ -76,7 +79,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 1. Remove QC-ed SNPs from dosage file (simple; to be done with Python, in “/ifs/scratch/c2b2/ip\_lab/sy2515/GTEx/data.v.5/44712/PhenoGenotypeFiles/RootStudyConsentSet\_phs000424.GTEx.v5.p1.c1.GRU/GenotypeFiles/phg000219.v4.GTEx\_Pilot\_Imputation.genotype-imputed-data.c1\_dosage\_qc”).
 
 
-## 5. Expression data processing
+## 6. Expression data processing
 
 1. eTissue is defined as GTEx tissues that have >= 60 effective samples (having genotype information).
 2. non-Null gene is defined as "at least \portion of the eSamples have rpkm value >= \threshold", where \portion is 0.5 and \threshold is 0.1 currently.
@@ -84,7 +87,7 @@ Then, I need to do the following procedure to get the genotype data (dosage) we 
 4. We have the hierarchichal clustering results for fully processed expression file (sample dimension, gene dimension), but we have two versions, one for normalized expression matrix (quantile), and another for un-normalized. All these clustering are from the mean expression levels in eTissues. The figures are here: https://drive.google.com/open?id=0B8d7OfcuWeFhfm9yeUpyZUhqeEVfZmN3WWxvZmpPTmZPNFRtd25OQkRvd1JkX3hJdGUyWTg.
 
 
-## 6. Fold enrichment of chromatin states
+## 7. Fold enrichment of chromatin states
 
 (learned from Roadmap Epigenomics project) on GWAS SNPs (data downloaded from ENCODE project)
 
@@ -202,7 +205,7 @@ Then, we use these prior information and the associations between pruned SNPs an
 
 
 
-## 7. Batch extraction
+## 8. Batch extraction
 
 There are two types of batch variables: number-valued and string-valued; for number type, if we have any missing value, we won’t use that variable, as there is no unbiased way to impute/quantify that missing number; for string type, we also quantify the missing value (they are already one special class in the original data), which simplifies the whole process. But not sure whether this is good enough. Under this condition, we remove 12 out of 172 individual batch variables, and 3 out of 72 sample batch variables.
 
@@ -219,7 +222,7 @@ The tables we refered are as followed:
 * ftp://ftp.ncbi.nlm.nih.gov/dbgap/studies/phs000424/phs000424.v4.p1/pheno_variable_summaries/phs000424.v4.pht002743.v4.p1.GTEx_Sample_Attributes.var_report.xml
 
 
-## 8. Statistics and what we have
+## 9. Statistics and what we have
 
 ### Statistics
 
