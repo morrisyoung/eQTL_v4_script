@@ -42,13 +42,17 @@ All the data files should be in the upper folder of this directory, for appropri
 4. prior\_calculate.py
 5. prior\_final\_average.py
 6. batch\_extract.py
-7. practice\_cis\_detect.py
 
-the following are
+the following are testing relevant:
 
-8. test\_corr\_cal.py
-9. xxx
+7. test\_corr\_cal.py (from the predicted expression, calculate the corr with the real data in the testing dataset)
+8. test\_corr\_plot.py (plot the corr, in different tissues)
+
+the following are the real misc:
+
+9. practice\_cis\_detect.py
 10. try.py
+
 
 
 ## 5. The pipeline for genotype QC and LD pruning
