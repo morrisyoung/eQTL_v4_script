@@ -1,6 +1,6 @@
 # eQTL_script
 
-The C++ implementation for the learning program is at https://github.com/morrisyoung/eQTL_cplusplus.
+The C++ implementation for the learning program is at https://github.com/morrisyoung/eQTL\_cplusplus.
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
@@ -47,6 +47,7 @@ the following are testing relevant:
 
 7. test\_corr\_cal.py (from the predicted expression, calculate the corr with the real data in the testing dataset)
 8. test\_corr\_plot.py (plot the corr calculated from above script, in different tissues)
+9. test\_gmm.py (based on the Pearson correlation numbers of all genes, we decompose the Gaussian mixture from the pdf and see how strong the positive signals are)
 
 the following are the real misc:
 
