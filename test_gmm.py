@@ -109,7 +109,7 @@ if __name__ == "__main__":
 	weight = weight1
 	x = np.linspace(-1,1,100)
 	plt.plot(x, weight * mlab.normpdf(x, mean, sigma), 'red')
-	plt.plot([], [], color='red', label="this is one learned Gaussian")
+	plt.plot([], [], color='red', label="one learned Gaussian")
 
 	mean = mean2
 	variance = var2
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 	weight = weight2
 	x = np.linspace(-1,1,100)
 	plt.plot(x, weight * mlab.normpdf(x, mean, sigma), 'green')
-	plt.plot([], [], color='green', label="this is one learned Gaussian")
+	plt.plot([], [], color='green', label="another learned Gaussian")
 
 
 

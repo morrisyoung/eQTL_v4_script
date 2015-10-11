@@ -38,7 +38,7 @@ All the data files should be in the upper folder of this directory, for appropri
 
 1. gene\_tss\_prepare.py
 2. GTEx\_beta\_extract.py
-3. get\_individual.py
+3. individual\_get.py
 4. prior\_calculate.py
 5. prior\_final\_average.py
 6. batch\_extract.py
