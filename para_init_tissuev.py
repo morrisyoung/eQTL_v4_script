@@ -1,14 +1,4 @@
-## this is used to initialzie the cis- parameters (actually learn these parameters from multi-linear regression)
-## the learned parameters have no tissue specificity (that's why this is only the initialization)
-## the results are saved in "../result_init/para_init_train_cis_dev_ind.txt", each line is for one gene (several SNPs are in the cis- region of this gene)
-## we can later on use the same script to test the prediction precision, and draw the plot for all the 20603 genes
-
-## for this work, we devide the samples based on individuals, meaning splitting the individuals into training set and testing set; we think it's fake that if we use samples from one individual to train and use samples (though from different tissues) of that individual to test
-
-## there are two associated files:
-##	"../result_init/para_init_train_cis_dev_ind.txt"
-##	"../result_init/para_init_train_cis_corr_dev_ind.txt"
-
+## test multi-linear modeling for cis- regulators, with tissue as a variable
 
 
 
@@ -19,10 +9,13 @@ import numpy as np
 # global variables definition and initialization
 num_gene = 0			# TBD
 num_individual = 0		# TBD
+num_tissue = 0			# TBD
+
 
 # genotype:
 snp_pos_list = []		# the position of all SNPs
 snp_dosage_rep = {}		# load all the dosage (for cluster)
+
 
 # expression:
 sample_rep = {}			# hashing all training samples into their rpkm array
@@ -30,10 +23,16 @@ sample_list = []		# in-order sample list
 gene_list = []			# all genes from the source file
 gene_index_map = {}		# re-map those genes into their order (reversed hashing of above)
 
+sample_tissue_map = {}		# now we need to know the tissue attribute of each sample
+tissue_list = []		# we need to know the order of all tissues
+tissue_index_map = {}		# reversed hashing of above list
+
+
 # information table:
 gene_tss = {}			# TSS for all genes (including those pruned genes)
 gene_xymt_rep = {}		# map all the X, Y, MT genes
 gene_cis_index = {}		# mapping the gene to cis snp indices (start position and end position in the snp vector)
+
 
 # result table:
 para_rep = {}
@@ -105,23 +104,37 @@ if __name__ == "__main__":
 	##===================================================== expression =====================================================
 	##================== get the current training tissues and samples inside (list)
 	print "get training samples..."
-	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_train", 'r')
+	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_train", 'r')
+
+	###
 	sample_rep = {}
+	sample_tissue_map = {}
+	tissue_list = []
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
 			break
 
 		line = line.split('\t')
-		#individual = line[0]
+		tissue = line[0]
+		tissue_list.append(tissue)
 		sample_list = line[1:]
-
 
 		for i in range(len(sample_list)):
 			sample = sample_list[i]
 			sample_rep[sample] = []
+			sample_tissue_map[sample] = tissue
 
 	file.close()
+
+	###
+	num_tissue = len(tissue_list)
+
+	###
+	tissue_index_map = {}
+	for i in range(len(tissue_list)):
+		tissue = tissue_list[i]
+		tissue_index_map[tissue] = i
 
 
 	##=================== query the RPKM according to the above list
@@ -254,7 +267,14 @@ if __name__ == "__main__":
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
 				genotype_matrix[j].append(dosage)
-			genotype_matrix[j].append(1)  # we need the intercept
+			##=== we need to add the tissue specificity as a variable
+			tissue = sample_tissue_map[sample]
+			tissue_index = tissue_index_map[tissue]
+			list = [0] * num_tissue
+			list[tissue_index] = 1
+			genotype_matrix[j].extend(list)
+			##=== the intercept of the regression
+			genotype_matrix[j].append(1)
 		genotype_matrix = np.array(genotype_matrix)
 		## sample:
 		#X = np.array([[1,2,3,1], [2,4,6,1], [3,6,9,1]])  # 1x1 + 2x2 + 3x3 + 1
@@ -282,7 +302,7 @@ if __name__ == "__main__":
 
 
 	##===================================================== save all learned parameters =====================================================
-	file = open("../result_init/para_init_train_cis_dev_ind.txt", 'w')
+	file = open("../result_init/para_init_train_cis_tissuev.txt", 'w')
 	for gene in para_rep:
 		para_list = para_rep[gene]
 		file.write(gene + '\t')
@@ -307,6 +327,7 @@ if __name__ == "__main__":
 	###
 	###
 	###
+	### note: should use the same tissue_list/tissue_index_map, because the corresponding parameters are for old index
 
 
 
@@ -317,21 +338,22 @@ if __name__ == "__main__":
 	##===================================================== expression =====================================================
 	##================== get the current training tissues and samples inside (list)
 	print "get testing samples..."
-	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_test", 'r')
+	file = open("../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples_test", 'r')
 	sample_rep = {}
+	sample_tissue_map = {}
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
 			break
 
 		line = line.split('\t')
+		tissue = line[0]
 		sample_list = line[1:]
-
 
 		for i in range(len(sample_list)):
 			sample = sample_list[i]
 			sample_rep[sample] = []
-
+			sample_tissue_map[sample] = tissue
 	file.close()
 
 
@@ -366,7 +388,6 @@ if __name__ == "__main__":
 	file.close()
 
 
-
 	### this is crucial for building the expression matrix, as we need the order of all samples
 	sample_list = []
 	for sample in sample_rep:
@@ -383,7 +404,7 @@ if __name__ == "__main__":
 
 
 	##===================================================== load all the parameters =====================================================
-	file = open("../result_init/para_init_train_cis_dev_ind.txt", 'r')
+	file = open("../result_init/para_init_train_cis_tissuev.txt", 'r')
 	para_rep = {}
 	while 1:
 		line = (file.readline()).strip()
@@ -429,8 +450,15 @@ if __name__ == "__main__":
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
 				genotype_array.append(dosage)
-			genotype_array.append(1)  # we need the intercept
-			## expected expression level
+			##=== we need to add the tissue specificity as a variable
+			tissue = sample_tissue_map[sample]
+			tissue_index = tissue_index_map[tissue]
+			list = [0] * num_tissue
+			list[tissue_index] = 1
+			genotype_array.extend(list)
+			##=== the intercept of the regression
+			genotype_array.append(1)
+			##=== expected expression level
 			rpkm = 0
 			for k in range(len(genotype_array)):
 				rpkm += genotype_array[k] * para_rep[gene][k]
@@ -444,7 +472,7 @@ if __name__ == "__main__":
 
 
 	##===================================================== save corr_rep =====================================================
-	file = open("../result_init/para_init_train_cis_corr_dev_ind.txt", 'w')
+	file = open("../result_init/para_init_train_cis_corr_tissuev.txt", 'w')
 	for gene in corr_rep:
 		file.write(gene + '\t' + str(corr_rep[gene]) + '\n')
 	file.close()

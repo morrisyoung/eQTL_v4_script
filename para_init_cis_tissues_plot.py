@@ -21,7 +21,11 @@ corr_rep = {}			# correlation of expected expression level and the real expressi
 
 
 # information table (colors)
-color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
+color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', 'blue', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
+
+#color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
+
+
 
 
 

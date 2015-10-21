@@ -22,7 +22,7 @@ if __name__ == '__main__':
 	while 1:
 		line = (file.readline()).strip()
 		count += 1
-	
+
 		if count <= 5:
 			continue
 
@@ -98,7 +98,6 @@ if __name__ == '__main__':
 
 
 	'''
-
 	## testing whether all the recorded samples (eQTL samples) have their genotype information
 	# individuals
 	individuals = {}
@@ -132,7 +131,6 @@ if __name__ == '__main__':
 				print sample
 				count += 1
 	print count
-
 	'''
 
 
@@ -322,6 +320,9 @@ if __name__ == '__main__':
 
 
 
+
+	## test color
+	'''
 	colors = {u'c': (0.0, 0.75, 0.75), u'b': (0.0, 0.0, 1.0), u'w': (1.0, 1.0, 1.0), u'g': (0.0, 0.5, 0.0), u'y': (0.75, 0.75, 0), u'k': (0.0, 0.0, 0.0), u'r': (1.0, 0.0, 0.0), u'm': (0.75, 0, 0.75), u'a': (1.0, 1.0, 1.0)}
 
 
@@ -333,4 +334,142 @@ if __name__ == '__main__':
 	plt.axis([0, 6, 0, 10])
 
 	plt.show()
+	'''
+
+
+
+
+
+	## calculate the mean and variance of the Pearson distributions (for tissue-specific model, and tissue-averaging model)
+	'''
+	print "hello world..."
+
+	for i in range(1, 18):
+		file = open("../result_init/para_init_train_cis_corr_tissues/para_corr_" + str(i) + ".txt", 'r')
+		list = []
+		while 1:
+			line = (file.readline()).strip()
+			if not line:
+				break
+
+			line = line.split('\t')
+			value = line[1]
+			if value == 'nan':
+				continue
+			list.append(float(value))
+		file.close()
+		list = np.array(list)
+		mean = np.mean(list)
+		var = np.var(list)
+		print "tissue#",
+		print i,
+		print mean,
+		print var
+
+
+
+	file = open("../result_init/para_init_train_cis_corr_dev_ind.txt", 'r')
+	list = []
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		value = line[1]
+		if value == 'nan':
+			continue
+		list.append(float(value))
+	file.close()
+	list = np.array(list)
+	mean = np.mean(list)
+	var = np.var(list)
+	print "overall:",
+	print mean,
+	print var
+	'''
+
+
+
+	## get the repo (mapping samples to their eTissues)
+	print "hello world"
+	filename1 = "../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_train"
+	filename2 = "../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_individuals_test"
+	filename3 = "../phs000424.v4.pht002743.v4.p1.c1.GTEx_Sample_Attributes.GRU.txt_tissue_type_60_samples"
+
+	file1 = open(filename1, 'r')
+	file2 = open(filename2, 'r')
+	file3 = open(filename3, 'r')
+
+	sample_tissue_map = {}
+	
+	while 1:
+		line = (file3.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		tissue = line[0]
+		sample_list = line[1:]
+
+		for i in range(len(sample_list)):
+			sample = sample_list[i]
+			sample_tissue_map[sample] = tissue
+
+	file3.close()
+
+
+	## training set
+	train_tissue_sample_rep = {}
+	while 1:
+		line = (file1.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		individual = line[0]
+		sample_list = line[1:]
+
+		for i in range(len(sample_list)):
+			sample = sample_list[i]
+			tissue = sample_tissue_map[sample]
+			if tissue in train_tissue_sample_rep:
+				train_tissue_sample_rep[tissue].append(sample)
+			else:
+				train_tissue_sample_rep[tissue] = [sample]
+	file1.close()
+
+	## testing set
+	test_tissue_sample_rep = {}
+	while 1:
+		line = (file2.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		individual = line[0]
+		sample_list = line[1:]
+
+		for i in range(len(sample_list)):
+			sample = sample_list[i]
+			tissue = sample_tissue_map[sample]
+			if tissue in test_tissue_sample_rep:
+				test_tissue_sample_rep[tissue].append(sample)
+			else:
+				test_tissue_sample_rep[tissue] = [sample]
+	file1.close()
+
+
+	print len(train_tissue_sample_rep)
+	print len(test_tissue_sample_rep)
+
+
+	print "tissue type, samples in training set, samples in testing set"
+	for tissue in train_tissue_sample_rep:
+		print tissue,
+		print ",",
+		print len(train_tissue_sample_rep[tissue]),
+		print ",",
+		print len(test_tissue_sample_rep[tissue])
+
 

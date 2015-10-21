@@ -16,15 +16,10 @@ gene_index_map = {}		# re-map those genes into their order (reversed hashing of 
 gene_tss = {}			# TSS for all genes (including those pruned genes)
 gene_xymt_rep = {}		# map all the X, Y, MT genes
 
-# result table:
-corr_rep = {}			# correlation of expected expression level and the real expression level
 
 
 # information table (colors)
-color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', 'blue', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
-
-#color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
-
+color_table = ['m', '#81b1d2', '#ffed6f', 'r', '#EEEEEE', '#cbcbcb', '#6d904f', 'y', '#E24A33', '#0072B2', '#f0f0f0', '0.40', 'blue', '#fc4f30', '#bfbbd9', '#ccebc4', 'c', '#A60628', '#988ED5', 'g', '#bcbcbc', '#FFB5B8']
 
 
 
@@ -86,9 +81,73 @@ if __name__ == "__main__":
 
 
 
+	## from Akshaan
+	'''
+	##===================================================== load corr_rep =====================================================
+	## transform the file format (from Akshaan) to a list
+	chr_corr_rep = {}
+	corr_list = []
+	file = open("../result_init/para_init_train_cis_corr_tissuev_ak.txt", 'r')
+	while 1:
+		line = (file.readline()).strip()
+		if not line:
+			break
+
+		line = line.split('\t')
+		chr = int(line[0])
+		corr = float(line[2])
+
+		if chr not in chr_corr_rep:
+			chr_corr_rep[chr] = [corr]
+		else:
+			chr_corr_rep[chr].append(corr)
+	file.close()
+
+	for i in range(22):
+		chr = i+1
+		for j in range(len(chr_corr_rep[chr])):
+			corr = chr_corr_rep[chr][j]
+			corr_list.append(corr)
+
+
+	##===================================================== plot =====================================================
+	# with gene_list and corr_rep
+	plt.figure(1)
+	for i in range(len(gene_list)):
+		gene = gene_list[i]
+		if gene in gene_xymt_rep:
+			continue
+		corr = corr_list[i]
+
+		chr = int(gene_tss[gene][0])
+		color = color_table[chr-1]
+		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
+
+		## add the gene id if the corr is high enough
+		#if corr >= 0.5:
+		#	print gene,
+		#	print corr
+
+
+	plt.axis([0, 20000, -1, 1])
+	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
+	plt.ylabel('Pearson correlation of gene expression level')
+	plt.title('Model testing for the multi-linear regression of cis- SNPs (+-1Mb)')
+	plt.grid(True)
+
+
+	plt.show()
+	'''
+
+
+
+
+
+	## from me
 	##===================================================== load corr_rep =====================================================
 	corr_rep = {}
-	file = open("../result_init/para_init_train_cis_corr_dev_ind.txt", 'r')
+	filename = "../result_init/para_init_train_cis_corr_tissuev.txt"
+	file = open(filename, 'r')
 	while 1:
 		line = (file.readline()).strip()
 		if not line:
@@ -118,9 +177,9 @@ if __name__ == "__main__":
 		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
 
 		## add the gene id if the corr is high enough
-		if corr >= 0.5:
-			print gene,
-			print corr
+		#if corr >= 0.5:
+		#	print gene,
+		#	print corr
 
 
 	plt.axis([0, 20000, -1, 1])
@@ -131,5 +190,3 @@ if __name__ == "__main__":
 
 
 	plt.show()
-
-
