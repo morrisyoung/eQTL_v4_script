@@ -81,72 +81,12 @@ if __name__ == "__main__":
 
 
 
-	## from Akshaan
-	'''
-	##===================================================== load corr_rep =====================================================
-	## transform the file format (from Akshaan) to a list
-	chr_corr_rep = {}
-	corr_list = []
-	file = open("../result_init/para_init_train_cis_corr_tissuev_ak.txt", 'r')
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
-
-		line = line.split('\t')
-		chr = int(line[0])
-		corr = float(line[2])
-
-		if chr not in chr_corr_rep:
-			chr_corr_rep[chr] = [corr]
-		else:
-			chr_corr_rep[chr].append(corr)
-	file.close()
-
-	for i in range(22):
-		chr = i+1
-		for j in range(len(chr_corr_rep[chr])):
-			corr = chr_corr_rep[chr][j]
-			corr_list.append(corr)
-
-
-	##===================================================== plot =====================================================
-	# with gene_list and corr_rep
-	plt.figure(1)
-	for i in range(len(gene_list)):
-		gene = gene_list[i]
-		if gene in gene_xymt_rep:
-			continue
-		corr = corr_list[i]
-
-		chr = int(gene_tss[gene][0])
-		color = color_table[chr-1]
-		plt.plot(i, corr, color, marker = 'o', alpha=0.7)
-
-		## add the gene id if the corr is high enough
-		#if corr >= 0.5:
-		#	print gene,
-		#	print corr
-
-
-	plt.axis([0, 20000, -1, 1])
-	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
-	plt.ylabel('Pearson correlation of gene expression level')
-	plt.title('Model testing for the multi-linear regression of cis- SNPs (+-1Mb)')
-	plt.grid(True)
-
-
-	plt.show()
-	'''
-
-
-
 
 
 	## from me
 	##===================================================== load corr_rep =====================================================
 	corr_rep = {}
-	filename = "../result_init/para_init_train_cis_corr_tissuev.txt"
+	filename = "../result_init/para_init_train_tissuev_corr.txt"
 	file = open(filename, 'r')
 	while 1:
 		line = (file.readline()).strip()
@@ -185,8 +125,9 @@ if __name__ == "__main__":
 	plt.axis([0, 20000, -1, 1])
 	plt.xlabel('Expressed genes (coding and non-coding) from all 22 chromosomes')
 	plt.ylabel('Pearson correlation of gene expression level')
-	plt.title('Model testing for the multi-linear regression of cis- SNPs (+-1Mb)')
+	plt.title('Model testing for the tissue-cat regression')
 	plt.grid(True)
 
 
 	plt.show()
+

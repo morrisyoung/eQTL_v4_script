@@ -1,20 +1,13 @@
 ## test multi-linear modeling for cis- regulators, with tissue as a variable
 
 
-
 import time
 import numpy as np
 
 
 # global variables definition and initialization
 num_gene = 0			# TBD
-num_individual = 0		# TBD
 num_tissue = 0			# TBD
-
-
-# genotype:
-snp_pos_list = []		# the position of all SNPs
-snp_dosage_rep = {}		# load all the dosage (for cluster)
 
 
 # expression:
@@ -29,9 +22,7 @@ tissue_index_map = {}		# reversed hashing of above list
 
 
 # information table:
-gene_tss = {}			# TSS for all genes (including those pruned genes)
 gene_xymt_rep = {}		# map all the X, Y, MT genes
-gene_cis_index = {}		# mapping the gene to cis snp indices (start position and end position in the snp vector)
 
 
 # result table:
@@ -41,64 +32,11 @@ corr_rep = {}			# correlation of expected expression level and the real expressi
 
 
 
-def snp_dosage_load():
-	global snp_dosage_rep
-
-	for individual in snp_dosage_rep:
-		for i in range(22):
-			snp_dosage_rep[individual].append([])
-			file = open("../genotype_185_dosage_matrix_qc/chr" + str(i+1) + "/SNP_dosage_" + individual + ".txt", 'r')
-			while 1:
-				line = (file.readline()).strip()
-				if not line:
-					break
- 
-				dosage = float(line)
-				snp_dosage_rep[individual][i].append(dosage)
-			file.close()
-	return
-
-
-
-
 if __name__ == "__main__":
 
 	print "working on the multi-linear regression of cis- SNPs for all genes"
 	time_start = time.time()
 
-
-	##===================================================== genotype =====================================================
-	print "snp_dosage_rep..."
-	file = open("../list_individual.txt", 'r')
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
-
-		individual = line
-		snp_dosage_rep[individual] = []
-	file.close()
-
-	num_individual = len(snp_dosage_rep)
-	snp_dosage_load()
-
-
-	## snp_pos_list
-	print "snp_pos_list..."
-	snp_pos_list = []
-	for i in range(22):
-		snp_pos_list.append([])
-		file = open("../genotype_185_dosage_matrix_qc/chr" + str(i+1) + "/SNP_info.txt", 'r')
-		while 1:
-			line = (file.readline()).strip()
-			if not line:
-				break
-
-			line = line.split(' ')
-			snp = line[0]
-			pos = int(line[1])
-			snp_pos_list[i].append(pos)
-		file.close()
 
 
 	##===================================================== expression =====================================================
@@ -192,21 +130,6 @@ if __name__ == "__main__":
 	expression_matrix = np.array(expression_matrix)
 
 	###
-	gene_tss = {}
-	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_tss", 'r')
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
-
-		line = line.split('\t')
-		gene = line[0]
-		chr = line[1]
-		tss = int(line[2])
-		gene_tss[gene] = (chr, tss)
-	file.close()
-
-	###
 	gene_xymt_rep = {}
 	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_xymt", 'r')
 	while 1:
@@ -220,36 +143,16 @@ if __name__ == "__main__":
 
 
 
-	##===================================================== cis- region definition =====================================================
-	## just loading
-	gene_cis_index = {}
-	file = open("../gencode.v18.genes.patched_contigs.gtf_gene_cis_range", 'r')
-	while 1:
-		line = (file.readline()).strip()
-		if not line:
-			break
-
-		line = line.split('\t')
-		gene = line[0]
-		start = int(line[1])
-		end = int(line[2])
-		gene_cis_index[gene] = (start, end)
-	file.close()
-
-
 
 	##===================================================== regression across all genes =====================================================
+	## (we only use the tissue type, with a intercept, to do the regression)
 	for i in range(len(gene_list)):
 
 		gene = gene_list[i]
 		print gene
 
-		if gene in gene_xymt_rep:
+		if gene in gene_xymt_rep:  ## we can model the xymt genes simply with tissue types, but to make things comparable, here we don't do that
 			continue
-
-		chr = int(gene_tss[gene][0])
-		start = gene_cis_index[gene][0]
-		end = gene_cis_index[gene][1]
 
 		##
 		expression_array = []
@@ -263,10 +166,13 @@ if __name__ == "__main__":
 		for j in range(len(sample_list)):
 			sample = sample_list[j]
 			genotype_matrix.append([])
+			'''
+			##=== this is for genotype (cis-)
 			individual = sample[:9]
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
 				genotype_matrix[j].append(dosage)
+			'''
 			##=== we need to add the tissue specificity as a variable
 			tissue = sample_tissue_map[sample]
 			tissue_index = tissue_index_map[tissue]
@@ -302,7 +208,9 @@ if __name__ == "__main__":
 
 
 	##===================================================== save all learned parameters =====================================================
-	file = open("../result_init/para_init_train_cis_tissuev.txt", 'w')
+	filename = "../result_init/para_init_train_tissuev.txt"
+	file = open(filename, 'w')
+
 	for gene in para_rep:
 		para_list = para_rep[gene]
 		file.write(gene + '\t')
@@ -402,9 +310,9 @@ if __name__ == "__main__":
 
 
 
-
 	##===================================================== load all the parameters =====================================================
-	file = open("../result_init/para_init_train_cis_tissuev.txt", 'r')
+	filename = "../result_init/para_init_train_tissuev.txt"
+	file = open(filename, 'r')
 	para_rep = {}
 	while 1:
 		line = (file.readline()).strip()
@@ -430,10 +338,6 @@ if __name__ == "__main__":
 		if gene not in para_rep:
 			continue
 
-		chr = int(gene_tss[gene][0])
-		start = gene_cis_index[gene][0]
-		end = gene_cis_index[gene][1]
-
 		##
 		expression_array_real = []
 		for j in range(len(sample_list)):
@@ -446,10 +350,13 @@ if __name__ == "__main__":
 		for j in range(len(sample_list)):
 			genotype_array = []
 			sample = sample_list[j]
+			'''
+			##=== we need to add the tissue specificity as a variable
 			individual = sample[:9]
 			for k in range(start, end+1):
 				dosage = snp_dosage_rep[individual][chr-1][k]
 				genotype_array.append(dosage)
+			'''
 			##=== we need to add the tissue specificity as a variable
 			tissue = sample_tissue_map[sample]
 			tissue_index = tissue_index_map[tissue]
@@ -472,7 +379,8 @@ if __name__ == "__main__":
 
 
 	##===================================================== save corr_rep =====================================================
-	file = open("../result_init/para_init_train_cis_corr_tissuev.txt", 'w')
+	filename = "../result_init/para_init_train_tissuev_corr.txt"
+	file = open(filename, 'w')
 	for gene in corr_rep:
 		file.write(gene + '\t' + str(corr_rep[gene]) + '\n')
 	file.close()

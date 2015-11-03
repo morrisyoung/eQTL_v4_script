@@ -262,3 +262,27 @@ The tables we refered are as followed:
 ### Parameter initialization
 
 * We calculated the initial values of all the parameters in "../result\_init/". We use matrix multiplication for the parameters connected with the hidden layers (the hidden layers are PCs of the expression matrix). We don' have tissue specificity here, as we can learn this specificity from the samples in each tissue later on.
+
+
+
+## 10. Miscellaneous
+
+#### About downloading the GTEx dataset and decripting it
+
+We can use the **aspera** (command-line ascp utility) to download the dataset into C2B2 cluster, and **aspera** can be deployed locally (normally in "/home/PERSONAL\_DIR/.aspera"). Remember, in the command line, the ticket will expire very soon, after which we should get a new ticket to use.
+
+We should use **SRA toolkit** to decript the dataset. We can directly use the pre-compiled binary for **CentOS** for C2B2 cluster. We should configure the "xxx.ngc", the public working directory and the project-specific working directory in **SRA toolkit**. After that, we should go to the project-specific working directory, and decript all the datasets over there. Some useful pages about **SRA toolkit** and decripting:
+
+* http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
+* http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=std
+* http://www.ncbi.nlm.nih.gov/Traces/sra/?view=toolkit\_doc&f=dbgap\_use#s-6
+
+There may be some mistakes like:
+
+```
+2015-11-03T18:54:30 vdb-decrypt.2.5.4 err: path not found while opening directory within file system module - unable to obtain a password
+2015-11-03T18:54:30 vdb-decrypt.2.5.4: exiting: RC(rcFS,rcDirectory,rcOpening,rcPath,rcNotFound) (834996504)
+```
+
+The way to deal with this is to delete your configured ".../ncbi/" folder, and configure the **SRA toolkit** again. The problem should be resolved after doing this.
+
