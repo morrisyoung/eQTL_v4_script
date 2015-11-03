@@ -267,7 +267,7 @@ The tables we refered are as followed:
 
 ## 10. Miscellaneous
 
-#### About downloading the GTEx dataset and decripting it
+### About downloading the GTEx dataset and decripting it
 
 We can use the **aspera** (command-line ascp utility) to download the dataset into C2B2 cluster, and **aspera** can be deployed locally (normally in "/home/PERSONAL\_DIR/.aspera"). Remember, in the command line, the ticket will expire very soon, after which we should get a new ticket to use.
 
