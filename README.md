@@ -284,5 +284,5 @@ There may be some mistakes like:
 2015-11-03T18:54:30 vdb-decrypt.2.5.4: exiting: RC(rcFS,rcDirectory,rcOpening,rcPath,rcNotFound) (834996504)
 ```
 
-The way to deal with this is to delete your configured ".../ncbi/" folder, and configure the **SRA toolkit** again. The problem should be resolved after doing this.
+The way to deal with this is to delete your configured ".../ncbi/" folder, and configure the **SRA toolkit** again as instructed above. The problem should be resolved after doing this.
 
