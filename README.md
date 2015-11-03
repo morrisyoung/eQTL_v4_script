@@ -275,7 +275,7 @@ We should use **SRA toolkit** to decript the dataset. We can directly use the pr
 
 * http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
 * http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=std
-* http://www.ncbi.nlm.nih.gov/Traces/sra/?view=toolkit\_doc&f=dbgap\_use#s-6
+* http://www.ncbi.nlm.nih.gov/Traces/sra/?view=toolkit\_doc&f=dbgap\_use
 
 There may be some mistakes like:
 
