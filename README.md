@@ -271,7 +271,7 @@ The tables we refered are as followed:
 
 We can use the **aspera** (command-line ascp utility) to download the dataset into C2B2 cluster, and **aspera** can be deployed locally (normally in "/home/PERSONAL\_DIR/.aspera"). Remember, in the command line, the ticket will expire very soon, after which we should get a new ticket to use.
 
-We should use **SRA toolkit** to decript the dataset. We can directly use the pre-compiled binary for **CentOS** for C2B2 cluster. We should configure the key "xxx.ngc", the public working directory and the project working directory in **SRA toolkit**. After that, we should go to the project working directory, and decript all the datasets over there. Some useful pages about **SRA toolkit** and decripting:
+We should use **SRA toolkit** to decrypt the dataset. We can directly use the pre-compiled binary for **CentOS** for C2B2 cluster. We should configure the key "xxx.ngc", the public working directory and the project working directory in **SRA toolkit**. After that, we should go to the project working directory (in ".../ncbi/" folder), and decrypt all the datasets over there (the encrypted data in a directory can be decrypted recursively). Some useful pages about **SRA toolkit** and decrypting:
 
 * http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=software
 * http://www.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=std
