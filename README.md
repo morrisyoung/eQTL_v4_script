@@ -1,6 +1,6 @@
 # eQTL_script
 
-The C++ implementation for the learning program is at https://github.com/morrisyoung/eQTL\_cplusplus.
+The C++ implementation for the learning program is at https://github.com/morrisyoung/eQTL_cplusplus.
 
 All the data files should be in the upper folder of this directory, for appropriate processing.
 
