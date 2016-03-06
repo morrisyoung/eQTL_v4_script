@@ -68,8 +68,8 @@ As I may use different LD threshold (currently 0.5 for R^2) and the association 
 3. for all the chromosome “X”, do the following (step#04 — step#16):
 4. tar zxvf “chrX.all.tgz”
 5. cp chrX.tfam “chrX.tfam”
-6. [QC] ./plink —tfile “chrX” —exclude “chrX.info4.maf05.exclusion.snplist.txt” —make-bed
-7. [pruning] ./plink —bfile plink —indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
+6. [QC] ./plink --tfile “chrX” --exclude “chrX.info4.maf05.exclusion.snplist.txt” --make-bed
+7. [pruning] ./plink --bfile plink --indep-pairwise 50kb 5 0.5 (0.5 may possibly be adjusted into other values)
 8. [LD statistics] ./plink --bfile plink --r2 --ld-snp-list plink.prune.out --ld-window-kb 50 --ld-window 99999 --ld-window-r2 0.5 (0.5 can be adjusted into other values)
 9. [LD statistics further] python post\_prune.py
 10. mv plink.prune.in ./post\_prune/chr“X”.prune.in
