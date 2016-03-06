@@ -75,8 +75,8 @@ As I may use different LD threshold (currently 0.5 for R^2) and the association 
 10. mv plink.prune.in ./post\_prune/chr”X”.prune.in
 11. mv plink.prune.out ./post\_prune/chr”X”.prune.out
 12. mv plink.ld ./post\_prune/chr”X”.ld
-13. mv chr”X".post\_prune.txt ./post\_prune/
-14. rm chr22.*
+13. mv chr``X".post\_prune.txt ./post\_prune/
+14. rm ``chrX.*"
 15. rm data_imputed.*
 16. rm plink.\*
 ```
